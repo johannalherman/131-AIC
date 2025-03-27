@@ -160,8 +160,9 @@
 
       .view-box {
         font-size: 24px;
-        width: 80px;
-        height: 800px;
+        width: 85px;
+        height: 500px;
+        margin-bottom: 100px;
         overflow-y: scroll;
         border: 2px solid black;
         background: white;
@@ -208,13 +209,13 @@
         margin: auto; 
         position: relative; 
         width: 400px;
-        height: 900px;
+        height: 800px;
       }
       #titration-setup {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        width: 400px;
+        width: 500px;
         z-index: 10;
       }
 
@@ -286,7 +287,7 @@
         </div>
         <div class="column-dropdowns" style="flex: 80%;">
           <div id="glassware-container-2" style="margin-top: 40px;">
-            <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full.png?raw=true">
+            <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v2.png?raw=true">
           </div>
         </div>
       </div>
@@ -325,14 +326,14 @@
         let label = document.createElement('div');
         label.textContent = i / 10;  // Set the label text to the current tick number
         label.style.position = 'absolute';
-        label.style.left = '35px';
-        label.style.top = '-25px';  // Align with tick mark
+        label.style.left = '40px';
+        label.style.top = '-30px';  // Align with tick mark
         label.style.color = 'black';
         tick.appendChild(label);
       } else if (i % 5 === 0) {  // every 0.5 increment
-        tick.style.width = '25px';
+        tick.style.width = '35px';
       } else {  // default tick mark
-        tick.style.width = '10px';
+        tick.style.width = '25px';
       }
       document.getElementById('ruler').appendChild(tick);
     }
