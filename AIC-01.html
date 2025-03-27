@@ -1,1 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chem 131 AIC-01 Simulation</title>
+    <style>
+      body {
+        width: 1000px;
+        margin: auto;
+        font: 18px Arial, sans-serif;
+        padding: 20px;
+        text-align: center;
+      }
+      button {        
+        font-size: 16px;
+      }
 
+      .tab {
+        overflow: hidden;
+        text-align: center; 
+      }
+      /* Style the buttons that are used to open the tab content */
+      .tab button { 
+        font-size: 22px;
+        padding: 10px 20px;
+        background-image: linear-gradient(#b4c6ff, #e7edff 50%, #b4c6ff);
+        border: 2px solid;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;        
+        outline: none;
+        transition: 0.3s;
+      }
+      /* Change background color of buttons on hover */
+      .tab button:hover {
+        background-color: #f5f5f5;
+        border: 2px solid white;
+        border-radius: 5px;
+      }
+      /* Create an active/current tablink class */
+      .tab button.active {
+        border: 2px solid;
+        border-radius: 5px;
+        background-color: white;
+      }
+      /* Style the tab content */
+      .tabcontent {
+        display: none;
+        padding: 10px;
+        border: 2px solid #FF2E37;
+        border-radius: 5px;
+      }
+
+      #dropdown-container {
+        margin: 40px auto 20px auto;
+        text-align: left;
+        width: 900px;
+        gap: 10px;
+        padding: 10px 30px;
+        background-color: #ffd7e1;
+        border: 2px solid black;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      #acidSelector {
+        font-size: 20px;
+      }
+
+      .button-container {
+        text-align: center;
+        z-index: 100;
+      }
+      .button-container button {
+        margin: 20px 0px 0px 0px;
+        padding: 10px 20px;
+        border: 2px solid;
+        border-radius: 5px;
+        cursor: pointer;
+      }  
+      .button-container button:hover {
+        border: 2px solid white;
+      }
+      .button-container button:focus {
+        padding: 9px 19px;
+        border: 3px solid #FF2E37;
+      }
+
+      .control-button {
+        padding: 10px 20px;
+        background-image: linear-gradient(#ff9ab3, #fedee6 50%, #ff9ab3);
+        border: 2px solid #FF2E37;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .control-button:hover {
+        border: 2px solid white;
+      }
+      .control-button:focus {
+        padding: 9px 19px;
+        border: 3px solid #FF2E37;
+      }
+
+      .row {
+        display: flex;
+      }
+      .column {
+        flex: 50%;
+        padding: 0px 20px;
+      }
+      .column-dropdowns {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #glassware-container-1 { 
+        margin: auto; 
+        position: relative; 
+        width: 400px;
+      }
+      #flask-1 {
+        position: absolute;
+        bottom: -12px; 
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        z-index: 10;
+      }
+      #balance-1 {
+        position: absolute;
+        bottom: -35.5%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 400px;
+        z-index: 10;
+      }
+      canvas { 
+        display: block; 
+        margin: auto; 
+        position: relative;
+        bottom: -7px;
+        width: 215px;
+        height: 320px;
+        z-index: -10; 
+      }
+      #total-mass-1 {
+        position: absolute;
+        bottom: -108px; 
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+        font-size: 24px;
+        font-weight: bold;
+        z-index: 10;
+      } 
+
+
+      .view-box {
+        font-size: 24px;
+        width: 80px;
+        height: 800px;
+        overflow-y: scroll;
+        border: 2px solid black;
+        background: white;
+        position: relative;
+      }
+      #ruler {
+        position: absolute;
+        width: 55px;
+        height: 0px;
+        z-index: 10;
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      #container {
+        display: flex;
+      }
+      .water {
+        position: relative;
+        height: 2510px;
+        width: 60px;
+        bottom: -35px;
+        left: 0px;
+        background: #abdcf2;
+        transition: height 0.3s;
+        opacity: 0.75;
+        z-index: 0;
+      }
+      .water::after {
+        content: "";
+        position: absolute;
+        top: 0px;
+        right: 50%; transform: translateX(50%);
+        width: 100%;
+        height: 5px;
+        background: #def1fa; /* Subtle meniscus highlight */
+        border-radius: 0% 0% 50% 50%; /* Round only the bottom corners */
+        z-index: 0;
+      }
+      /* NOTE: 50px = 1 mL caross ruler */
+
+
+      #glassware-container-2 { 
+        margin: auto; 
+        position: relative; 
+        width: 400px;
+        height: 900px;
+      }
+      #titration-setup {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 400px;
+        z-index: 10;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="dropdown-container">
+      <div class="row">
+        <div class="column-dropdowns" style="flex: 80%;">
+          <label for="acidSelector"><strong>1)</strong> Select Primary Food Dye:</label>
+          <select id="acidSelector">
+            <option value="" selected>Choose from Dropdown</option>
+            <option value="Citric">Citric Acid</option>
+            <option value="Malic">Malic Acid</option>
+            <option value="Malonic">Malonic Acid</option>
+            <option value="Tartaric">Tartaric Acid</option>
+          </select>  
+        </div>
+        <div class="column-dropdowns" style="flex: 20%;">
+          <button id="resetButton" class="control-button">Reset All Controls</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 1 content -->
+    <div id="Tab1" class="tabcontent">
+
+      <div class="row" >
+        <div class="column">
+          <!--Balance Area #1 Code-->
+          <div id="glassware-container-1" style="margin-top: 40px;">
+            <img id="flask-1" src="https://github.com/johannalherman/131-AIC/blob/main/Beaker-1.png?raw=true">
+            <canvas id="canvas"></canvas>
+            <img id="balance-1" src="https://github.com/johannalherman/131-BBB/blob/main/Balance.png?raw=true">
+            <p id="total-mass-1"><span>0.000</span> g</p>
+          </div>
+
+          <div class="button-container" style="margin-top: 120px; margin-bottom: 20px;">
+            <button id="tareButton-1" class="control-button">Tare Balance</button>
+            <button id="clearButton" class="control-button">Empty Flask</button>
+          </div>
+        </div>
+
+        <div class="column">
+          <p style="text-align: left;"><strong>2)</strong> Weigh out solid food acid</p>
+          <div class="button-container" style="margin-top: -20px;">
+            <button id="addSmallacidBtn" type="button" disabled>Add Small Amount</button>
+            <button id="addLargeacidBtn" type="button" disabled>Add Large Amount</button>
+          </div>
+          <div class="tab" style="margin: 80px 10px 40px 10px;">
+            <button class="tablinks" onclick="openTabs(event, 'Tab2')" id="defaultOpen"><strong>3)</strong> Dissolve food acid & add universal indicator!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2 content -->
+    <div id="Tab2" class="tabcontent">
+
+      <div class="row" >
+        <div class="column-dropdowns" style="flex: 20%; justify-content: center; align-items: center;">
+          <div class="view-box">
+            <p></p>
+            <div id="ruler"></div>
+            <div class="container">
+              <div class="water" id="water"></div>
+            </div>
+          </div>
+        </div>
+        <div class="column-dropdowns" style="flex: 80%;">
+          <div id="glassware-container-2" style="margin-top: 40px;">
+            <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full.png?raw=true">
+          </div>
+        </div>
+      </div>
+
+      <div class="tab" style="margin: 100px 10px 40px 10px;">
+        <button class="tablinks" onclick="openTabs(event, 'Tab1')"><strong>#)</strong> Return to start!</button>
+      </div>
+    </div>
+
+    <p style="color: #ff2e37; text-align: left;"><em>This simulation was designed for use on a laptop or desktop computer. Functions may not operate on a mobile device.</em></p>
+  </body>
+  <script>
+    function getRandomAmount(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const MolarMasses = {
+      Citric: { MW: 192.124, rxnRatio: 3},
+      Malic: { MW: 134.0874, rxnRatio: 2},
+      Malonic: { MW: 104.0615, rxnRatio: 2},
+      Tartaric: { MW: 150.087, rxnRatio: 2}
+    };
+
+
+    // Generate ticks
+    for (let i = 0; i <= 500; i++) {
+      var tick = document.createElement('div');
+      tick.style.height = '1px';
+      tick.style.position = 'absolute';
+      tick.style.top = i * 5 + 'px'; 
+      tick.style.left = '0';
+      tick.style.background = 'black';
+
+      if (i % 10 === 0) {  // every whole number
+        tick.style.width = '60px';
+        let label = document.createElement('div');
+        label.textContent = i / 10;  // Set the label text to the current tick number
+        label.style.position = 'absolute';
+        label.style.left = '35px';
+        label.style.top = '-25px';  // Align with tick mark
+        label.style.color = 'black';
+        tick.appendChild(label);
+      } else if (i % 5 === 0) {  // every 0.5 increment
+        tick.style.width = '25px';
+      } else {  // default tick mark
+        tick.style.width = '10px';
+      }
+      document.getElementById('ruler').appendChild(tick);
+    }
+
+    function openTabs(evt, Sim_part) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(Sim_part).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+
+  </script>
+</html>
