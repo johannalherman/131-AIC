@@ -162,8 +162,8 @@
         font-size: 24px;
         width: 90px;
         height: 500px;
-        left: 170px;
-        bottom: 700px;
+        left: 580px;
+        bottom: 800px;
         margin-bottom: 100px;
         overflow-y: scroll;
         border: 2px solid black;
@@ -171,13 +171,11 @@
         position: relative;
         z-index: 50;
       }
-      .view-box::after{
-        font-size: 14px;
-        content: "Buret Reading";
-        position: absolute;
-        top: 0px;
-        right: 50%; transform: translateX(50%);
-        width: 100%;
+      .view-box-label{
+        font-size: 16px;
+        position: relative;
+        left: 138px;
+        bottom: 1430px;
       }
 
       #ruler-zoomed {
@@ -283,14 +281,15 @@
         text-align: center;
         z-index: 1000;
         position: absolute; 
-        left: 255px; 
-        bottom: 168px;
-        width: 100px;
+        left: 250px; 
+        bottom: 158px;
+        width: 150px;
       }
       .button-container-flow button {
-        font-size: 8pt; 
+        font-size: 12pt; 
         border: 2px solid;
         border-radius: 5px;
+        margin-bottom: 4px;
         cursor: pointer;
       }
       .button-container-flow button:hover {
@@ -416,6 +415,7 @@
           <div class="water-1" id="water-1"></div>
         </div>
       </div>
+        <p class="view-box-label">Buret Reading</p>
       <div class="tab" style="margin: -550px 10px 40px 10px;">
         <button class="tablinks" onclick="openTabs(event, 'Tab1')"><strong>#)</strong> Return to start!</button>
       </div>
