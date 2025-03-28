@@ -162,7 +162,7 @@
         font-size: 24px;
         width: 90px;
         height: 500px;
-        left: 80px;
+        left: 170px;
         bottom: 700px;
         margin-bottom: 100px;
         overflow-y: scroll;
@@ -232,7 +232,7 @@
       }
       #buret {
         position: absolute;
-        left: 115px;
+        left: 205px;
         bottom: 150px;
         width: 37.04px;
         z-index: 10;
@@ -241,7 +241,7 @@
         position: absolute;
         height: 552px;
         width: 14px;
-        left: 127px;
+        left: 217px;
         bottom: 198px;
         border-radius: 0px 0px 180px 180px;
         background: #abdcf2;
@@ -266,16 +266,24 @@
       #flow {
         position: absolute;
         bottom: 165px;
-        left: 153px;
+        left: 243px;
         transform: translateX(-50%);
         width: 20px;
+        z-index: 10;
+      }
+      #stirer {
+        position: absolute;
+        bottom: 31px;
+        left: 223px;
+        transform: translateX(-50%);
+        width: 35px;
         z-index: 10;
       }
       .button-container-flow {
         text-align: center;
         z-index: 1000;
         position: absolute; 
-        left: 165px; 
+        left: 255px; 
         bottom: 168px;
         width: 100px;
       }
@@ -292,7 +300,7 @@
       .dropContainer {
         position: absolute;
         bottom: 39px;
-        left: 126px;        
+        left: 216px;        
         width: 10px;
         height: 115px;
         z-index: 100;
@@ -300,8 +308,8 @@
       }
       .drop {
         position: absolute;
-        width: 4px;
-        height: 8px;
+        width: 6px;
+        height: 18px;
         background: #abdcf2;
         opacity: 0.75;
         border-radius: 50%;
@@ -312,7 +320,7 @@
       .water-3 {
         position: absolute;
         bottom: 31px;
-        left: 84.5px;        
+        left: 174.5px;        
         width: 95px;
         height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
         border-radius: 0px 0px 14px 14px;
@@ -320,6 +328,16 @@
         opacity: 0.75;
         transition: height 0.3s;
         z-index: 50;
+      }
+
+
+      #pH_Reading {
+        position: relative;
+        bottom: -753px;
+        left: -194px;
+        font-size: 20px;
+        font-weight: bold;
+        z-index: 100;
       }
 
     </style>
@@ -378,7 +396,7 @@
     <!-- Tab 2 content -->
     <div id="Tab2" class="tabcontent">
       <div id="glassware-container-2" style="margin-top: 40px;">
-        <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v5.png?raw=true">
+        <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v7.png?raw=true">
         <img id="buret" src="https://github.com/johannalherman/131-AIC/blob/main/Buret.png?raw=true">
         <div class="water-2" id="water-2"></div>
         <div class="water-3" id="water-3"></div>
@@ -387,7 +405,9 @@
         <div class="button-container-flow">
           <button id="increase" onclick="changeFlow(1)">Increase Flow</button>
           <button id="decrease" onclick="changeFlow(-1)">Decrease Flow</button>
-        </div>
+        </div>        
+        <img id="stirer" src="https://github.com/johannalherman/131-AIC/blob/main/stir-1.png?raw=true">
+        <p id="pH_Reading">pH: <span>0.00</span></p>
       </div>
       <div class="view-box">
         <p></p>
@@ -448,6 +468,12 @@
       document.getElementById('ruler-zoomed').appendChild(tick);
     }
 
+    let pH_value = 7;
+    update_pHDisplay()
+    function update_pHDisplay() {
+      document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
+    }
+
     // drops    
     let speedLevels = [0, 1000, 700, 400, 100];
     let currentSpeedIndex = 0;
@@ -470,7 +496,7 @@
       changeLiquidLevel1()
       changeLiquidLevel2()
       changeLiquidLevel3()
-    }    
+    }
     function changeLiquidLevel1() {
       document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 50) + "px"
       document.getElementById("water-1").style.bottom = -35 - (vol_buretZoomed_trans * 50) + "px"
@@ -483,7 +509,7 @@
     }
 
     function createDrop() {
-      if (vol_buret <= -4) {
+      if (vol_buret <= -2.5) {
         clearInterval(interval);
         return;
       }
@@ -506,7 +532,7 @@
       };
     }
     function changeSpeed(change) {
-      if (vol_buret <= -4) return;
+      if (vol_buret <= -2.5) return;
       currentSpeedIndex = Math.max(0, Math.min(4, currentSpeedIndex + change));
       //document.getElementById("speedLevel").innerText = currentSpeedIndex + 1;
       if (interval) clearInterval(interval);
@@ -520,6 +546,24 @@
       changeSpeed(change)      
       document.getElementById("flow").src = flows[current_flow].src;
     }
+
+    let current_stir = 1;
+    const stirers = {
+      1: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-1.png?raw=true"},
+      2: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-2.png?raw=true"},
+      3: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-3.png?raw=true"},
+      4: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-4.png?raw=true"},
+      5: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-5.png?raw=true"},
+      6: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-6.png?raw=true"},
+      7: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-7.png?raw=true"},
+      8: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-8.png?raw=true"}
+    };
+    function changeStir() {
+      current_stir = (current_stir % 8) + 1;
+      document.getElementById("stirer").src = stirers[current_stir].src;
+    }
+    setInterval(changeStir, 120);
+    
 
     function openTabs(evt, Sim_part) {
       // Declare all variables
