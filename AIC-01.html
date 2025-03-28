@@ -314,7 +314,7 @@
         bottom: 31px;
         left: 84.5px;        
         width: 95px;
-        height: 30px; /* MAX 130px, ratio: 2px/mL */
+        height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
         border-radius: 0px 0px 14px 14px;
         background: #abdcf2;
         opacity: 0.75;
@@ -472,17 +472,21 @@
       changeLiquidLevel3()
     }    
     function changeLiquidLevel1() {
-        document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 50) + "px"
-        document.getElementById("water-1").style.bottom = -35 - (vol_buretZoomed_trans * 50) + "px"
+      document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 50) + "px"
+      document.getElementById("water-1").style.bottom = -35 - (vol_buretZoomed_trans * 50) + "px"
     }
     function changeLiquidLevel2() {
-        document.getElementById("water-2").style.height = 32 + (vol_buret * 10.4) + "px"
+      document.getElementById("water-2").style.height = 32 + (vol_buret * 10.4) + "px"
     }
     function changeLiquidLevel3() {
-        document.getElementById("water-3").style.height = vol_beaker * 2 + "px"
+      document.getElementById("water-3").style.height = vol_beaker * 1.5 + "px"
     }
 
     function createDrop() {
+      if (vol_buret <= -4) {
+        clearInterval(interval);
+        return;
+      }
       let drop = document.createElement("div");
       drop.classList.add("drop");
       document.getElementById("dropContainer").appendChild(drop);
@@ -502,6 +506,7 @@
       };
     }
     function changeSpeed(change) {
+      if (vol_buret <= -4) return;
       currentSpeedIndex = Math.max(0, Math.min(4, currentSpeedIndex + change));
       //document.getElementById("speedLevel").innerText = currentSpeedIndex + 1;
       if (interval) clearInterval(interval);
