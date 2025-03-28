@@ -423,6 +423,7 @@
 
 
     <p style="color: #ff2e37; text-align: left;"><em>This simulation was designed for use on a laptop or desktop computer. Functions may not operate on a mobile device.</em></p>
+    <p style="color: #ff2e37; text-align: left;"><em>Created by Johanna L. Herman, Ph.D. for use in CHEM 131 at the University of Delaware.</em></p>
   </body>
   <script>
     let vol_buretZoomed_start = 50
@@ -562,7 +563,7 @@
       current_stir = (current_stir % 8) + 1;
       document.getElementById("stirer").src = stirers[current_stir].src;
     }
-    setInterval(changeStir, 120);
+    // setInterval(changeStir, 120);
     
 
     function openTabs(evt, Sim_part) {
