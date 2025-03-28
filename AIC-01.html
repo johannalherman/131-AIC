@@ -69,7 +69,7 @@
 
       .button-container {
         text-align: center;
-        z-index: 100;
+        z-index: 1000;
       }
       .button-container button {
         margin: 20px 0px 0px 0px;
@@ -162,13 +162,25 @@
         font-size: 24px;
         width: 90px;
         height: 500px;
+        left: 150px;
+        bottom: 250px;
         margin-bottom: 100px;
         overflow-y: scroll;
         border: 2px solid black;
         background: white;
-        position: relative;
+        position: absolute;
+        z-index: 50;
       }
-      #ruler {
+      .view-box::after{
+        font-size: 14px;
+        content: "Buret Reading";
+        position: absolute;
+        top: 0px;
+        right: 50%; transform: translateX(50%);
+        width: 100%;
+      }
+
+      #ruler-zoomed {
         position: absolute;
         width: 60px;
         height: 0px;
@@ -217,6 +229,45 @@
         transform: translateX(-50%);
         width: 500px;
         z-index: 10;
+      }
+      #ruler {
+        font-size: 5px;
+        position: absolute;
+        left: 128px;
+        bottom: 730px;
+        width: 12px;
+        height: 0px;
+        z-index: 10;
+        text-align: center;
+      }
+
+      #flow {
+        position: absolute;
+        left: 50%;
+        bottom: 165px;
+        left: 153px;
+        transform: translateX(-50%);
+        width: 20px;
+        z-index: 10;
+      }
+      .button-container-flow {
+        text-align: center;
+        z-index: 1000;
+        position: absolute; 
+        left: 165px; 
+        bottom: 149px;
+        width: 100px;
+      }
+      .button-container-flow button {
+        font-size: 8pt; 
+        margin: 5px 5px 5px 0px;
+        padding: 5px 5px;
+        border: 2px solid;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .button-container-flow button:hover {
+        border: 2px solid white;
       }
 
     </style>
@@ -274,34 +325,52 @@
 
     <!-- Tab 2 content -->
     <div id="Tab2" class="tabcontent">
-
-      <div class="row" >
-        <div class="column-dropdowns" style="flex: 20%; justify-content: center; align-items: center;">
-          <div class="view-box">
-            <p></p>
-            <div id="ruler"></div>
-            <div class="container">
-              <div class="water" id="water"></div>
-            </div>
-          </div>
-        </div>
-        <div class="column-dropdowns" style="flex: 80%;">
-          <div id="glassware-container-2" style="margin-top: 40px;">
-            <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v2.png?raw=true">
-          </div>
+      <div class="view-box">
+        <p></p>
+        <div id="ruler-zoomed"></div>
+        <div class="container">
+          <div class="water" id="water"></div>
         </div>
       </div>
-
-      <div class="tab" style="margin: 100px 10px 40px 10px;">
+      <div id="glassware-container-2" style="margin-top: 40px;">
+        <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v2.png?raw=true">
+        <div id="ruler"></div>
+        <img id="flow" src="https://github.com/johannalherman/131-AIC/blob/main/Flow_1.png?raw=true">
+        <div class="button-container-flow">
+          <button id="increase" onclick="changeFlow('up')">Increase Flow</button>
+          <button id="decrease" onclick="changeFlow('down')">Decrease Flow</button>
+        </div>
+      </div>
+      <div class="tab" style="margin: 80px 10px 40px 10px;">
         <button class="tablinks" onclick="openTabs(event, 'Tab1')"><strong>#)</strong> Return to start!</button>
       </div>
     </div>
+
 
     <p style="color: #ff2e37; text-align: left;"><em>This simulation was designed for use on a laptop or desktop computer. Functions may not operate on a mobile device.</em></p>
   </body>
   <script>
     function getRandomAmount(min, max) {
       return Math.random() * (max - min) + min;
+    }
+
+    let current_flow = 1    
+    const flows = {
+      1: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_1.png?raw=true"},
+      2: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_2.png?raw=true"},
+      3: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_3.png?raw=true"},
+      4: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_4.png?raw=true"},
+      5: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_5.png?raw=true"}
+    };
+    
+    function changeFlow(direction) {
+      if (direction === 'up'){
+				current_flow += 1
+      }
+      if (direction === 'down'){
+				current_flow -= 1
+      }
+      document.getElementById("flow").src = flows[current_flow].src;
     }
 
     const MolarMasses = {
@@ -312,10 +381,10 @@
     };
 
 
-    // Generate ticks
+    // Generate ticks - Zoomed in
     for (let i = 0; i <= 500; i++) {
       var tick = document.createElement('div');
-      tick.style.height = '1px';
+      tick.style.height = '0.2px';
       tick.style.position = 'absolute';
       tick.style.top = i * 5 + 'px'; 
       tick.style.left = '0';
@@ -334,6 +403,32 @@
         tick.style.width = '35px';
       } else {  // default tick mark
         tick.style.width = '25px';
+      }
+      document.getElementById('ruler-zoomed').appendChild(tick);
+    }
+    
+    // Generate ticks - Zoomed out
+    for (let i = 0; i <= 500; i++) {
+      var tick = document.createElement('div');
+      tick.style.height = '0.08px';
+      tick.style.position = 'absolute';
+      tick.style.top = i * 1 + 'px'; 
+      tick.style.left = '0';
+      tick.style.background = 'gray';
+
+      if (i % 10 === 0) {  // every whole number
+        tick.style.width = '12px';
+        let label = document.createElement('div');
+        label.textContent = i / 10;  // Set the label text to the current tick number
+        label.style.position = 'absolute';
+        label.style.left = '8px';
+        label.style.top = '-5px';  // Align with tick mark
+        label.style.color = 'black';
+        tick.appendChild(label);
+      } else if (i % 5 === 0) {  // every 0.5 increment
+        tick.style.width = '7px';
+      } else {  // default tick mark
+        tick.style.width = '5px';
       }
       document.getElementById('ruler').appendChild(tick);
     }
