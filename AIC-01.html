@@ -189,14 +189,14 @@
         margin-top: 40px;
       }
 
-      #container {
+      #container-1 {
         display: flex;
       }
       .water-1 {
         position: relative;
         height: 2510px;
         width: 70px;
-        bottom: -35px;
+        bottom: -35px; /* NOTE: whatever is (-) from height must be (-) into bottom */
         left: 0px;
         background: #abdcf2;
         transition: height 0.3s;
@@ -249,6 +249,7 @@
         opacity: 0.75;
         z-index: 5;
       }
+      /* NOTE: 10.4px = 1 mL across ruler-zoomed */
       .water-2::after {
         content: "";
         position: absolute;
@@ -264,7 +265,6 @@
 
       #flow {
         position: absolute;
-        left: 50%;
         bottom: 165px;
         left: 153px;
         transform: translateX(-50%);
@@ -289,15 +289,37 @@
         border: 2px solid white;
       }
 
+      .dropContainer {
+        position: absolute;
+        bottom: 39px;
+        left: 126px;        
+        width: 10px;
+        height: 115px;
+        z-index: 100;
+        overflow: hidden;
+      }
       .drop {
         position: absolute;
-        width: 10px;
-        height: 20px;
-        background-color: blue;
+        width: 4px;
+        height: 8px;
+        background: #abdcf2;
+        opacity: 0.75;
         border-radius: 50%;
-        opacity: 0.7;
         left: 50%; /* Drops come from the same location */
         transform: translateX(-50%);
+      }
+
+      .water-3 {
+        position: absolute;
+        bottom: 31px;
+        left: 84.5px;        
+        width: 95px;
+        height: 30px; /* MAX 130px, ratio: 2px/mL */
+        border-radius: 0px 0px 14px 14px;
+        background: #abdcf2;
+        opacity: 0.75;
+        transition: height 0.3s;
+        z-index: 50;
       }
 
     </style>
@@ -359,16 +381,18 @@
         <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v5.png?raw=true">
         <img id="buret" src="https://github.com/johannalherman/131-AIC/blob/main/Buret.png?raw=true">
         <div class="water-2" id="water-2"></div>
+        <div class="water-3" id="water-3"></div>
         <img id="flow" src="https://github.com/johannalherman/131-AIC/blob/main/Flow_1.png?raw=true">
+        <div class="dropContainer" id="dropContainer"></div>
         <div class="button-container-flow">
-          <button id="increase" onclick="changeFlow('up')">Increase Flow</button>
-          <button id="decrease" onclick="changeFlow('down')">Decrease Flow</button>
+          <button id="increase" onclick="changeFlow(1)">Increase Flow</button>
+          <button id="decrease" onclick="changeFlow(-1)">Decrease Flow</button>
         </div>
       </div>
       <div class="view-box">
         <p></p>
         <div id="ruler-zoomed"></div>
-        <div class="container">
+        <div class="container-1">
           <div class="water-1" id="water-1"></div>
         </div>
       </div>
@@ -381,27 +405,13 @@
     <p style="color: #ff2e37; text-align: left;"><em>This simulation was designed for use on a laptop or desktop computer. Functions may not operate on a mobile device.</em></p>
   </body>
   <script>
+    let vol_buretZoomed_start = 50
+    let vol_buretZoomed_trans = 0
+    let vol_buret = 50
+    let vol_beaker = 15
+
     function getRandomAmount(min, max) {
       return Math.random() * (max - min) + min;
-    }
-
-    let current_flow = 0
-    const flows = {
-      0: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_1.png?raw=true"},
-      1: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_2.png?raw=true"},
-      2: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_3.png?raw=true"},
-      3: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_4.png?raw=true"},
-      4: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_5.png?raw=true"}
-    };
-
-    function changeFlow(direction) {
-      if (direction === 'up'){
-        current_flow += 1
-      }
-      if (direction === 'down'){
-        current_flow -= 1
-      }
-      document.getElementById("flow").src = flows[current_flow].src;
     }
 
     const MolarMasses = {
@@ -438,6 +448,73 @@
       document.getElementById('ruler-zoomed').appendChild(tick);
     }
 
+    // drops    
+    let speedLevels = [0, 1000, 700, 400, 100];
+    let currentSpeedIndex = 0;
+    let interval = null;
+    let current_flow = 0
+    const flows = {
+      0: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_1.png?raw=true"},
+      1: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_2.png?raw=true"},
+      2: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_3.png?raw=true"},
+      3: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_4.png?raw=true"},
+      4: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_5.png?raw=true"}
+    };
+
+    const volumePerDrop = 0.05;
+
+    function updateVolumes() {
+      vol_beaker += volumePerDrop;
+      vol_buretZoomed_trans += volumePerDrop;
+      vol_buret -= volumePerDrop;
+      changeLiquidLevel1()
+      changeLiquidLevel2()
+      changeLiquidLevel3()
+    }    
+    function changeLiquidLevel1() {
+        document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 50) + "px"
+        document.getElementById("water-1").style.bottom = -35 - (vol_buretZoomed_trans * 50) + "px"
+    }
+    function changeLiquidLevel2() {
+        document.getElementById("water-2").style.height = 32 + (vol_buret * 10.4) + "px"
+    }
+    function changeLiquidLevel3() {
+        document.getElementById("water-3").style.height = vol_beaker * 2 + "px"
+    }
+
+    function createDrop() {
+      let drop = document.createElement("div");
+      drop.classList.add("drop");
+      document.getElementById("dropContainer").appendChild(drop);
+      let fallDistance = document.getElementById("dropContainer").clientHeight;
+
+      let animation = drop.animate([
+        { transform: "translateY(0px)" },
+        { transform: "translateY(" + fallDistance + "px)" }
+      ], {
+        duration: 250,
+        easing: "linear"
+      });
+
+      animation.onfinish = () => {
+        drop.remove();
+        updateVolumes();
+      };
+    }
+    function changeSpeed(change) {
+      currentSpeedIndex = Math.max(0, Math.min(4, currentSpeedIndex + change));
+      //document.getElementById("speedLevel").innerText = currentSpeedIndex + 1;
+      if (interval) clearInterval(interval);
+      if (speedLevels[currentSpeedIndex] > 0) {
+        interval = setInterval(createDrop, speedLevels[currentSpeedIndex]);
+      }
+    }
+
+    function changeFlow(change) {
+      current_flow = Math.max(0, Math.min(4, current_flow + change));
+      changeSpeed(change)      
+      document.getElementById("flow").src = flows[current_flow].src;
+    }
 
     function openTabs(evt, Sim_part) {
       // Declare all variables
