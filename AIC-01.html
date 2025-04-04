@@ -15,6 +15,10 @@
       button {        
         font-size: 16px;
       }
+      .disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
 
       .tab {
         overflow: hidden;
@@ -116,14 +120,14 @@
         align-items: center;
       }
 
+
       #glassware-container-1 { 
-        margin: auto; 
+        text-align: center; 
         position: relative; 
-        width: 400px;
       }
-      #flask-1 {
+      #beaker-1 {
         position: absolute;
-        bottom: -12px; 
+        bottom: -12px;
         left: 50%;
         transform: translateX(-50%);
         width: 200px;
@@ -142,7 +146,7 @@
         margin: auto; 
         position: relative;
         bottom: -7px;
-        width: 215px;
+        width: 166px;
         height: 320px;
         z-index: -10; 
       }
@@ -155,7 +159,7 @@
         font-size: 24px;
         font-weight: bold;
         z-index: 10;
-      } 
+      }
 
 
       .view-box {
@@ -171,11 +175,13 @@
         position: relative;
         z-index: 50;
       }
-      .view-box-label{
-        font-size: 16px;
-        position: relative;
-        left: 138px;
-        bottom: 1430px;
+      .view-box::after{
+        font-size: 14px;
+        content: "Buret Reading";
+        position: absolute;
+        top: 0px;
+        right: 50%; transform: translateX(50%);
+        width: 100%;
       }
 
       #ruler-zoomed {
@@ -193,11 +199,10 @@
       .water-1 {
         position: relative;
         height: 2510px;
-        width: 76px;
+        width: 70px;
         bottom: -35px; /* NOTE: whatever is (-) from height must be (-) into bottom */
         left: 0px;
-        background: #abdcf2;        
-        border-right: 2px solid;
+        background: #abdcf2;
         transition: height 0.3s;
         opacity: 0.75;
         z-index: 0;
@@ -239,7 +244,7 @@
       .water-2 {
         position: absolute;
         height: 552px;
-        width: 15px;
+        width: 14px;
         left: 217px;
         bottom: 198px;
         border-radius: 0px 0px 180px 180px;
@@ -270,27 +275,18 @@
         width: 20px;
         z-index: 10;
       }
-      #stirer {
-        position: absolute;
-        bottom: 31px;
-        left: 223px;
-        transform: translateX(-50%);
-        width: 35px;
-        z-index: 10;
-      }
       .button-container-flow {
         text-align: center;
         z-index: 1000;
         position: absolute; 
-        left: 250px; 
-        bottom: 158px;
-        width: 150px;
+        left: 255px; 
+        bottom: 168px;
+        width: 100px;
       }
       .button-container-flow button {
-        font-size: 12pt; 
+        font-size: 8pt; 
         border: 2px solid;
         border-radius: 5px;
-        margin-bottom: 4px;
         cursor: pointer;
       }
       .button-container-flow button:hover {
@@ -316,6 +312,14 @@
         left: 50%; /* Drops come from the same location */
         transform: translateX(-50%);
       }
+      #stirer {
+        position: absolute;
+        bottom: 31px;
+        left: 223px;
+        transform: translateX(-50%);
+        width: 35px;
+        z-index: 10;
+      }
 
       .water-3 {
         position: absolute;
@@ -323,7 +327,7 @@
         left: 175.5px;        
         width: 94px;
         height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
-        border-radius: 0px 0px 15px 15px;
+        border-radius: 0px 0px 14px 14px;
         background: #abdcf2;
         opacity: 0.75;
         transition: height 0.3s;
@@ -363,33 +367,23 @@
 
     <!-- Tab 1 content -->
     <div id="Tab1" class="tabcontent">
-
-      <div class="row" >
-        <div class="column">
-          <!--Balance Area #1 Code-->
-          <div id="glassware-container-1" style="margin-top: 40px;">
-            <img id="flask-1" src="https://github.com/johannalherman/131-AIC/blob/main/Beaker-1.png?raw=true">
-            <canvas id="canvas"></canvas>
-            <img id="balance-1" src="https://github.com/johannalherman/131-BBB/blob/main/Balance.png?raw=true">
-            <p id="total-mass-1"><span>0.000</span> g</p>
-          </div>
-
-          <div class="button-container" style="margin-top: 120px; margin-bottom: 20px;">
-            <button id="tareButton-1" class="control-button">Tare Balance</button>
-            <button id="clearButton" class="control-button">Empty Flask</button>
-          </div>
-        </div>
-
-        <div class="column">
-          <p style="text-align: left;"><strong>2)</strong> Weigh out solid food acid</p>
-          <div class="button-container" style="margin-top: -20px;">
-            <button id="addSmallacidBtn" type="button" disabled>Add Small Amount</button>
-            <button id="addLargeacidBtn" type="button" disabled>Add Large Amount</button>
-          </div>
-          <div class="tab" style="margin: 80px 10px 40px 10px;">
-            <button class="tablinks" onclick="openTabs(event, 'Tab2')" id="defaultOpen"><strong>3)</strong> Dissolve food acid & add universal indicator!</button>
-          </div>
-        </div>
+      <div id="glassware-container-1">
+        <img id="beaker-1" src="https://github.com/johannalherman/131-AIC/blob/main/Beaker-1.png?raw=true">
+        <canvas id="canvas"></canvas>
+        <img id="balance-1" src="https://github.com/johannalherman/131-BBB/blob/main/Balance.png?raw=true">
+        <p id="total-mass-1"><span>0.000</span> g</p>
+      </div>
+      <div class="button-container" style="margin-top: 140px;">
+        <p style="text-align: center; margin-bottom: 0px;"><strong>2)</strong> Weigh out solid food acid</p>
+        <button id="addSmallParticlesBtn" type="button" disabled>Add Small Amount</button>
+        <button id="addLargeParticlesBtn" type="button" disabled>Add Large Amount</button>
+      </div>
+      <div class="button-container">
+        <button id="tareButton" class="control-button">Tare</button>
+        <button id="clearButton" class="control-button">Clear Balance</button>
+      </div>
+      <div class="tab" style="margin: 80px 10px 40px 10px;">
+        <button id="move2tab2" class="tablinks" onclick="{openTabs(event, 'Tab2'); pH_calculate()}" type="button" disabled><strong>3)</strong> Dissolve food acid & add universal indicator!</button>
       </div>
     </div>
 
@@ -416,22 +410,15 @@
           <div class="water-1" id="water-1"></div>
         </div>
       </div>
-        <p class="view-box-label">Buret Reading</p>
       <div class="tab" style="margin: -550px 10px 40px 10px;">
-        <button class="tablinks" onclick="openTabs(event, 'Tab1')"><strong>#)</strong> Return to start!</button>
+        <button class="tablinks" onclick="openTabs(event, 'Tab1')" id="defaultOpen"><strong>#)</strong> Return to start!</button>
       </div>
     </div>
-
 
     <p style="color: #ff2e37; text-align: left;"><em>This simulation was designed for use on a laptop or desktop computer. Functions may not operate on a mobile device.</em></p>
     <p style="color: #ff2e37; text-align: left;"><em>Created by Johanna L. Herman, Ph.D. for use in CHEM 131 at the University of Delaware.</em></p>
   </body>
   <script>
-    let vol_buretZoomed_start = 50
-    let vol_buretZoomed_trans = 0
-    let vol_buret = 50
-    let vol_beaker = 15
-
     function getRandomAmount(min, max) {
       return Math.random() * (max - min) + min;
     }
@@ -443,6 +430,155 @@
       Tartaric: { MW: 150.087, rxnRatio: 2}
     };
 
+    document.getElementById("acidSelector").addEventListener("change", function(event) {    
+      currentAcid = event.target.value
+      addSmallParticlesBtn.disabled = false;
+      addLargeParticlesBtn.disabled = false;
+    });
+
+
+    let beakerMass = getRandomAmount(70, 90);
+    let acidMass = 0;
+    let acid_mol = 0;
+    let totalMass_1 = beakerMass;
+    let tareOffset = 0;
+    let amount = 0;
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const addSmallParticlesBtn = document.getElementById("addSmallParticlesBtn");
+    const addLargeParticlesBtn = document.getElementById("addLargeParticlesBtn");
+
+    const particles = [];
+    const gravity = 0.25;
+    const particleRadius = 4;
+    let pileHeight = 0;
+    let pileWidth = 0;
+
+
+
+
+    function Particle(x, y, delay) {
+      this.x = x;
+      this.y = y;
+      this.vy = 0;
+      this.stable = false;
+      this.delay = delay;
+    }
+
+    Particle.prototype.update = function () {
+      if (!this.stable) {
+        if (this.delay > 0) {
+          this.delay--;
+          return;
+        }
+        this.vy += gravity;
+        this.y += this.vy;
+
+        if (this.y + particleRadius >= canvas.height - pileHeight) {
+          this.stable = true;
+          particles.splice(particles.indexOf(this), 1);
+          pileHeight += 0.5;
+          pileWidth += 10;
+        }
+      }
+    };
+
+    function addParticles(size) {    	
+      move2tab2.disabled = false;
+      if (size === 'small') {
+        amount = 5;
+      } else {
+        amount = 15;
+      }
+      for (let i = 0; i < amount; i++) {
+        const x = canvas.width / 2 + Math.random() * 10 - 5;
+        const y = 0;
+        const delay = Math.floor(Math.random() * 10); // Random delay for staggered falling
+        const newParticle = new Particle(x, y, delay);
+        particles.push(newParticle);
+      }
+
+      if (size === 'small') {
+        acidMass = getRandomAmount(0.005, 0.020);
+      } else {
+        acidMass = getRandomAmount(0.100, 0.200);
+      }
+      totalMass_1 += acidMass;      
+      acid_mol = (acidMass / MolarMasses[currentAcid].MW);
+      setTimeout(() => { updateMassDisplay_1()}, 500); 
+    }
+
+    function updateMassDisplay_1() {
+      document.getElementById("total-mass-1").textContent = `${(totalMass_1 - tareOffset).toFixed(3)} g`;
+    }    
+    updateMassDisplay_1()
+
+    document.getElementById("tareButton").addEventListener("click", () => {
+      tareOffset = totalMass_1;
+      updateMassDisplay_1();
+    });   
+
+    document.getElementById("clearButton").addEventListener("click", () => {
+      tareOffset = 0;
+      totalMass_1 = beakerMass;
+      pileHeight = 0;
+      pileWidth = 0;
+      updateMassDisplay_1();
+    });
+
+    function update() {
+      particles.forEach(p => p.update());
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#f1e3d3";
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, particleRadius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Draw growing triangular pile with shadow and border
+      ctx.save(); // Save current context state
+      ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetX = 5;
+      ctx.shadowOffsetY = 5;
+
+      ctx.fillStyle = "#f1e3d3";
+      ctx.strokeStyle = "#f1e3d3"; // Border color
+      ctx.lineWidth = 0.2; // Border thickness
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - pileWidth, canvas.height);
+      ctx.lineTo(canvas.width / 2 + pileWidth, canvas.height);
+      ctx.lineTo(canvas.width / 2, canvas.height - pileHeight);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke(); // Apply border
+
+      ctx.restore(); // Restore previous context state
+    }
+
+    function loop() {
+      update();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    addSmallParticlesBtn.addEventListener("click", () => addParticles("small"));
+    addLargeParticlesBtn.addEventListener("click", () => addParticles("large"));
+    loop();
+
+
+
+    let vol_buretZoomed_start = 50
+    let vol_buretZoomed_trans = 0
+    let vol_buret = 50
+    let vol_beaker = 15
+    let NaOH_M = getRandomAmount(0.09, 0.11)
+    let base_mol = 0;
 
     // Generate ticks - Zoomed in
     for (let i = 0; i <= 500; i++) {
@@ -470,12 +606,6 @@
       document.getElementById('ruler-zoomed').appendChild(tick);
     }
 
-    let pH_value = 7;
-    update_pHDisplay()
-    function update_pHDisplay() {
-      document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
-    }
-
     // drops    
     let speedLevels = [0, 1000, 700, 400, 100];
     let currentSpeedIndex = 0;
@@ -500,7 +630,7 @@
       changeLiquidLevel3()
     }
     function changeLiquidLevel1() {
-      document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 50) + 10 + "px"
+      document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 50) + "px"
       document.getElementById("water-1").style.bottom = -35 - (vol_buretZoomed_trans * 50) + "px"
     }
     function changeLiquidLevel2() {
@@ -531,6 +661,7 @@
       animation.onfinish = () => {
         drop.remove();
         updateVolumes();
+        pH_calculate()
       };
     }
     function changeSpeed(change) {
@@ -550,22 +681,71 @@
     }
 
     let current_stir = 1;
-    const stirers = {
-      1: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-1.png?raw=true"},
-      2: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-2.png?raw=true"},
-      3: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-3.png?raw=true"},
-      4: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-4.png?raw=true"},
-      5: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-5.png?raw=true"},
-      6: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-6.png?raw=true"},
-      7: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-7.png?raw=true"},
-      8: { src: "https://github.com/johannalherman/131-AIC/blob/main/stir-8.png?raw=true"}
-    };
+    const baseURL = "https://raw.githubusercontent.com/johannalherman/131-AIC/main/stir-";
     function changeStir() {
       current_stir = (current_stir % 8) + 1;
-      document.getElementById("stirer").src = stirers[current_stir].src;
+      document.getElementById("stirer").src = `${baseURL}${current_stir}.png`;
     }
     setInterval(changeStir, 120);
-    
+
+    function pH_calculate() {
+      base_mol = (NaOH_M * (vol_buretZoomed_trans/1000)) / MolarMasses[currentAcid].rxnRatio;
+      acid_molRemaining = acid_mol - base_mol;
+      base_molRemaining = base_mol - acid_mol;
+      congacid1_mol = base_mol;
+      congacid2_mol = base_mol;
+
+      if( acid_mol > base_mol ) {
+        pH_value = (-1) * Math.log10( (acid_mol - base_mol) / (vol_beaker/1000) );
+        update_pHDisplay();
+      } else {
+        pH_value = 14 + Math.log10( (base_mol - acid_mol) / (vol_beaker/1000) );
+        update_pHDisplay();
+      }
+    }
+
+    let pH_value = 7;
+    let pHcolor = "#abdcf2";
+
+    function update_pHDisplay() {
+      document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
+      pH_color()
+    }
+    update_pHDisplay()
+
+    // pH_color
+    function pH_color() {
+      let pHcolor;
+
+      if (pH_value < 3) { 
+        pHcolor = "#FF0000"; // Red
+      } else if (pH_value >= 3 && pH_value < 6) {
+        pHcolor = "#ffd200"; // Yellow
+      } else if (pH_value >= 6 && pH_value < 8) {
+        pHcolor = "#008000"; // Green
+      } else if (pH_value >= 8 && pH_value < 11) {
+        pHcolor = "#0000FF"; // Blue
+      } else if (pH_value >= 11) {
+        pHcolor = "#4B0082"; // Indigo
+      } else {
+        pHcolor = "#abdcf2"; // Default color
+      }
+
+      const beakerSoln = document.getElementById("water-3");
+      if (beakerSoln) {
+        beakerSoln.style.background = pHcolor;
+      }
+    }
+
+
+
+
+
+
+
+
+
+
 
     function openTabs(evt, Sim_part) {
       // Declare all variables
