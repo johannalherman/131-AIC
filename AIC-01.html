@@ -299,7 +299,7 @@
         left: 216px;        
         width: 10px;
         height: 115px;
-        z-index: 100;
+        z-index: 10;
         overflow: hidden;
       }
       .drop {
@@ -324,12 +324,12 @@
       .water-3 {
         position: absolute;
         bottom: 33px;
-        left: 175.5px;        
-        width: 94px;
+        left: 175px;        
+        width: 94.5px;
         height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
         border-radius: 0px 0px 14px 14px;
         background: #abdcf2;
-        opacity: 0.75;
+        opacity: 0.25;
         transition: height 0.3s;
         z-index: 50;
       }
@@ -705,7 +705,6 @@
     }
 
     let pH_value = 7;
-    let pHcolor = "#abdcf2";
 
     function update_pHDisplay() {
       document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
