@@ -438,20 +438,21 @@
     });
 
     document.getElementById("resetButton").addEventListener("click", () => {
-      // Reset dropdown
-      const acidSelector = document.getElementById("acidSelector");
-      acidSelector.value = "";
       addSmallParticlesBtn.disabled = true;
       addLargeParticlesBtn.disabled = true;
 
       // panel 1
       clearBalancce()
+      currentAcid = ""
 
       // panel 2
       resetTitration()
 
       openTabs(event, 'Tab1')
-
+      
+      // Reset dropdown
+      const acidSelector = document.getElementById("acidSelector");
+      acidSelector.value = "";
     });
 
 
@@ -500,7 +501,10 @@
       }
     };
 
-    function addParticles(size) {    	
+    function addParticles(size) {  
+      if (acidMass > 0.5 || currentAcid === ""){
+        return
+      }
       move2tab2.disabled = false;
       if (size === 'small') {
         amount = 5;
@@ -519,10 +523,6 @@
         acidMass += getRandomAmount(0.005, 0.020);
       } else {
         acidMass += getRandomAmount(0.100, 0.200);
-      }
-      if (acidMass > 0.5){
-        addSmallParticlesBtn.disabled = true;
-        addLargeParticlesBtn.disabled = true;
       }
       setTimeout(() => { updateMassDisplay_1()}, 500); 
     }
@@ -604,7 +604,7 @@
       var tick = document.createElement('div');
       tick.style.height = '0.2px';
       tick.style.position = 'absolute';
-      tick.style.top = i * 5 + 'px'; 
+      tick.style.top = i * 10 + 'px'; 
       tick.style.left = '0';
       tick.style.background = 'black';
 
@@ -648,8 +648,8 @@
       changeLiquidLevel3()
     }
     function changeLiquidLevel1() {
-      document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 50) + "px"
-      document.getElementById("water-1").style.bottom = -35 - (vol_buretZoomed_trans * 50) + "px"
+      document.getElementById("water-1").style.height = ((vol_buretZoomed_start - vol_buretZoomed_trans) * 100) + "px"
+      document.getElementById("water-1").style.bottom = -35 - (vol_buretZoomed_trans * 100) + "px"
     }
     function changeLiquidLevel2() {
       document.getElementById("water-2").style.height = 32 + (vol_buret * 10.4) + "px"
@@ -853,6 +853,8 @@
 
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
+
+
 
   </script>
 </html>
