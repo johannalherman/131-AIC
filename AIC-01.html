@@ -380,16 +380,16 @@
       </div>
       <div class="button-container">
         <button id="tareButton" class="control-button">Tare</button>
-        <button id="clearButton" class="control-button">Clear Balance</button>
+        <button id="clearButton" class="control-button" onclick="clearBalancce();">Clear Balance</button>
       </div>
       <div class="tab" style="margin: 80px 10px 40px 10px;">
-        <button id="move2tab2" class="tablinks" onclick="openTabs(event, 'Tab2'); pH_calculate();" type="button" disabled><strong>3)</strong> Dissolve food acid & add universal indicator!</button>
+        <button id="move2tab2" class="tablinks" onclick="openTabs(event, 'Tab2'); pH_calculate(); findClosestPH();" type="button" disabled><strong>3)</strong> Dissolve food acid & add universal indicator!</button>
       </div>
     </div>
 
     <!-- Tab 2 content -->
     <div id="Tab2" class="tabcontent">
-        <p id="BaseConc" style="font-size: 18pt">Your standardized sodium hydroxide concentration is <strong><span>XXX</span> M</strong></p>
+      <p id="BaseConc" style="font-size: 18pt">Your standardized sodium hydroxide concentration is <strong><span>XXX</span> M</strong></p>
       <div id="glassware-container-2" style="margin-top: 40px;">
         <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v7.png?raw=true">
         <img id="buret" src="https://github.com/johannalherman/131-AIC/blob/main/Buret.png?raw=true">
@@ -412,7 +412,7 @@
         </div>
       </div>
       <div class="tab" style="margin: -550px 10px 40px 10px;">
-        <button class="tablinks" onclick="openTabs(event, 'Tab1')" id="defaultOpen"><strong>#)</strong> Return to start!</button>
+        <button class="tablinks" onclick="openTabs(event, 'Tab1'); clearBalancce(); resetTitration();" id="defaultOpen"><strong>#)</strong> Return to start!</button>
       </div>
     </div>
 
@@ -435,6 +435,23 @@
       currentAcid = event.target.value
       addSmallParticlesBtn.disabled = false;
       addLargeParticlesBtn.disabled = false;
+    });
+
+    document.getElementById("resetButton").addEventListener("click", () => {
+      // Reset dropdown
+      const acidSelector = document.getElementById("acidSelector");
+      acidSelector.value = "";
+      addSmallParticlesBtn.disabled = true;
+      addLargeParticlesBtn.disabled = true;
+
+      // panel 1
+      clearBalancce()
+
+      // panel 2
+      resetTitration()
+
+      openTabs(event, 'Tab1')
+
     });
 
 
@@ -516,13 +533,14 @@
       updateMassDisplay_1();
     });   
 
-    document.getElementById("clearButton").addEventListener("click", () => {
+    function clearBalancce() {
       tareOffset = 0;
       acidMass = 0;
       pileHeight = 0;
       pileWidth = 0;
       updateMassDisplay_1();
-    });
+      move2tab2.disabled = true;
+    };
 
     function update() {
       particles.forEach(p => p.update());
@@ -615,10 +633,10 @@
       4: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_5.png?raw=true"}
     };
 
-    function updateVolumes() {
-      vol_beaker += volumePerDrop;
-      vol_buretZoomed_trans += volumePerDrop;
-      vol_buret -= volumePerDrop;
+    function updateVolumes(change) {
+      vol_beaker += change;
+      vol_buretZoomed_trans += change;
+      vol_buret -= change;
       changeLiquidLevel1()
       changeLiquidLevel2()
       changeLiquidLevel3()
@@ -654,7 +672,7 @@
 
       animation.onfinish = () => {
         drop.remove();
-        updateVolumes();
+        updateVolumes(volumePerDrop);
         findClosestPH();
       };
     }
@@ -687,10 +705,10 @@
 
     let NaOH_M = getRandomAmount(0.095, 0.105)
     updateconc()
-      function updateconc() {
-        document.querySelector("#BaseConc span").textContent = (NaOH_M).toFixed(3)
-      }
-    let pH_value = 2;
+    function updateconc() {
+      document.querySelector("#BaseConc span").textContent = (NaOH_M).toFixed(3)
+    }
+
     let ph_values = [];
     let volume_values = [];
     let h = 0;
@@ -761,7 +779,9 @@
       document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
       pH_color()
     }
+    let pH_value = 2;
     update_pHDisplay()
+
     // pH_color
     function pH_color() {
       let pHcolor;
@@ -786,13 +806,18 @@
       }
     }
 
-
-
-
-
-
-
-
+    function resetTitration() {    
+      vol_buretZoomed_start = 50
+      vol_buretZoomed_trans = 0
+      vol_buret = 50
+      vol_beaker = 15
+      changeFlow(-10)
+      updateVolumes(0)
+      pH_value = 2;
+      update_pHDisplay()
+      ph_values = [];
+      volume_values = [];
+    }
 
 
 
