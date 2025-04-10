@@ -383,7 +383,7 @@
         <button id="clearButton" class="control-button">Clear Balance</button>
       </div>
       <div class="tab" style="margin: 80px 10px 40px 10px;">
-        <button id="move2tab2" class="tablinks" onclick="{openTabs(event, 'Tab2'); pH_calculate()}" type="button" disabled><strong>3)</strong> Dissolve food acid & add universal indicator!</button>
+        <button id="move2tab2" class="tablinks" onclick="openTabs(event, 'Tab2'); pH_calculate();" type="button" disabled><strong>3)</strong> Dissolve food acid & add universal indicator!</button>
       </div>
     </div>
 
@@ -423,11 +423,11 @@
       return Math.random() * (max - min) + min;
     }
 
-    const MolarMasses = {
-      Citric: { MW: 192.124, rxnRatio: 3},
-      Malic: { MW: 134.0874, rxnRatio: 2},
-      Malonic: { MW: 104.0615, rxnRatio: 2},
-      Tartaric: { MW: 150.087, rxnRatio: 2}
+    const AcidData = {
+      Citric: { MW: 192.124, rxnRatio: 3, pKa1: 3.12, pKa2: 4.76, pKa3: 6.39},
+      Malic: { MW: 134.0874, rxnRatio: 2, pKa1: 3.40, pKa2: 5.11, pKa3: 10},
+      Malonic: { MW: 104.0615, rxnRatio: 2, pKa1: 2.83, pKa2: 5.69, pKa3: 10},
+      Tartaric: { MW: 150.087, rxnRatio: 2, pKa1: 2.98, pKa2: 4.34, pKa3: 10}
     };
 
     document.getElementById("acidSelector").addEventListener("change", function(event) {    
@@ -439,7 +439,6 @@
 
     let beakerMass = getRandomAmount(70, 90);
     let acidMass = 0;
-    let acid_mol = 0;
     let totalMass_1 = beakerMass;
     let tareOffset = 0;
     let amount = 0;
@@ -504,8 +503,7 @@
       } else {
         acidMass = getRandomAmount(0.100, 0.200);
       }
-      totalMass_1 += acidMass;      
-      acid_mol = (acidMass / MolarMasses[currentAcid].MW);
+      totalMass_1 += acidMass;  
       setTimeout(() => { updateMassDisplay_1()}, 500); 
     }
 
@@ -577,8 +575,6 @@
     let vol_buretZoomed_trans = 0
     let vol_buret = 50
     let vol_beaker = 15
-    let NaOH_M = getRandomAmount(0.09, 0.11)
-    let base_mol = 0;
 
     // Generate ticks - Zoomed in
     for (let i = 0; i <= 500; i++) {
@@ -607,6 +603,7 @@
     }
 
     // drops    
+    const volumePerDrop = 0.05;
     let speedLevels = [0, 1000, 700, 400, 100];
     let currentSpeedIndex = 0;
     let interval = null;
@@ -618,8 +615,6 @@
       3: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_4.png?raw=true"},
       4: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_5.png?raw=true"}
     };
-
-    const volumePerDrop = 0.05;
 
     function updateVolumes() {
       vol_beaker += volumePerDrop;
@@ -661,7 +656,7 @@
       animation.onfinish = () => {
         drop.remove();
         updateVolumes();
-        pH_calculate()
+        findClosestPH();
       };
     }
     function changeSpeed(change) {
@@ -688,30 +683,82 @@
     }
     setInterval(changeStir, 120);
 
-    function pH_calculate() {
-      base_mol = (NaOH_M * (vol_buretZoomed_trans/1000)) / MolarMasses[currentAcid].rxnRatio;
-      acid_molRemaining = acid_mol - base_mol;
-      base_molRemaining = base_mol - acid_mol;
-      congacid1_mol = base_mol;
-      congacid2_mol = base_mol;
 
-      if( acid_mol > base_mol ) {
-        pH_value = (-1) * Math.log10( (acid_mol - base_mol) / (vol_beaker/1000) );
-        update_pHDisplay();
-      } else {
-        pH_value = 14 + Math.log10( (base_mol - acid_mol) / (vol_beaker/1000) );
-        update_pHDisplay();
+
+
+    let NaOH_M = 0.100
+    let pH_value = 2;
+    let ph_values = [];
+    let volume_values = [];
+    let h = 0;
+    let oh = 0;
+    let delta = 0;
+    let denominator = 0;
+    let numerator = 0;
+    let alpha1 = 0;
+    let alpha2 = 0;
+    let alpha3 = 0;
+    let volume = 0;
+
+    let Kw = Math.pow(10, -14)
+    let acid_Volume = 0.015; 
+
+    function pH_calculate() {     
+      let acid_M = (acidMass/AcidData[currentAcid].MW) / acid_Volume;
+      let ka1 = Math.pow(10, -AcidData[currentAcid].pKa1);
+      let ka2 = Math.pow(10, -AcidData[currentAcid].pKa2);
+      let ka3 = Math.pow(10, -AcidData[currentAcid].pKa3);
+
+
+      for (let ph = 1; ph <= 14; ph += 0.01) {
+        let h = Math.pow(10, -ph);
+        let oh = Kw / h;
+        let delta = h - oh;
+
+        if (currentAcid === 'Citric') {
+          let denominator = (ka1 * ka2 * ka3) + (ka1 * ka2 * h) + (ka1 * Math.pow(h, 2)) + Math.pow(h, 3);
+          let alpha1 = (ka1 * Math.pow(h, 2)) / denominator;
+          let alpha2 = (ka1 * ka2 * h) / denominator;
+          let alpha3 = (ka1 * ka2 * ka3) / denominator;
+          let numerator = (acid_M * alpha1) + (2 * acid_M * alpha2) + (3 * acid_M * alpha3) - delta;
+          let volume = acid_Volume * numerator / (NaOH_M + delta);
+          ph_values.push(ph);
+          volume_values.push(volume);
+        } else {
+          let denominator = (ka1 * ka2) + (ka1 * h) + (h * h);
+          let alpha1 = (ka1 * h) / denominator;
+          let alpha2 = (ka1 * ka2) / denominator;
+          let numerator = (acid_M * alpha1) + (2 * acid_M * alpha2) - delta;
+          let volume = acid_Volume * numerator / (NaOH_M + delta);
+          ph_values.push(ph);
+          volume_values.push(volume);
+        }
+
       }
+      return { ph_values, volume_values };
     }
 
-    let pH_value = 7;
+
+    function findClosestPH() {   
+      let closestIndex = 0;
+      let minDiff = Math.abs(volume_values[0] - (vol_buretZoomed_trans/1000));
+
+      for (let i = 1; i < volume_values.length; i++) {
+        const diff = Math.abs(volume_values[i] - (vol_buretZoomed_trans/1000));
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIndex = i;
+        }
+      }
+      pH_value = ph_values[closestIndex];
+      update_pHDisplay()
+    }
 
     function update_pHDisplay() {
       document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
       pH_color()
     }
     update_pHDisplay()
-
     // pH_color
     function pH_color() {
       let pHcolor;
