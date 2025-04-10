@@ -146,7 +146,7 @@
         margin: auto; 
         position: relative;
         bottom: -7px;
-        width: 166px;
+        width: 170px;
         height: 320px;
         z-index: -10; 
       }
@@ -494,7 +494,7 @@
         if (this.y + particleRadius >= canvas.height - pileHeight) {
           this.stable = true;
           particles.splice(particles.indexOf(this), 1);
-          pileHeight += 0.5;
+          pileHeight += 0.4;
           pileWidth += 10;
         }
       }
@@ -520,6 +520,10 @@
       } else {
         acidMass += getRandomAmount(0.100, 0.200);
       }
+      if (acidMass > 0.5){
+        addSmallParticlesBtn.disabled = true;
+        addLargeParticlesBtn.disabled = true;
+      }
       setTimeout(() => { updateMassDisplay_1()}, 500); 
     }
 
@@ -539,6 +543,8 @@
       pileHeight = 0;
       pileWidth = 0;
       updateMassDisplay_1();
+      addSmallParticlesBtn.disabled = false;
+      addLargeParticlesBtn.disabled = false;
       move2tab2.disabled = true;
     };
 
