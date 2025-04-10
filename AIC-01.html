@@ -621,16 +621,16 @@
 
     // drops    
     const volumePerDrop = 0.05;
-    let speedLevels = [0, 1000, 700, 400, 100];
+    let speedLevels = [0, 1000, 500, 100, 10];
     let currentSpeedIndex = 0;
     let interval = null;
     let current_flow = 0
     const flows = {
-      0: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_1.png?raw=true"},
-      1: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_2.png?raw=true"},
+      0: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_5.png?raw=true"},
+      1: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_4.png?raw=true"},
       2: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_3.png?raw=true"},
-      3: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_4.png?raw=true"},
-      4: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_5.png?raw=true"}
+      3: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_2.png?raw=true"},
+      4: { src: "https://github.com/johannalherman/131-AIC/blob/main/Flow_1.png?raw=true"}
     };
 
     function updateVolumes(change) {
@@ -772,7 +772,10 @@
         }
       }
       pH_value = ph_values[closestIndex];
-      update_pHDisplay()
+      setTimeout(() => {
+        update_pHDisplay()
+      }, 750);
+
     }
 
     function update_pHDisplay() {
