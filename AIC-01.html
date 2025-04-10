@@ -389,6 +389,7 @@
 
     <!-- Tab 2 content -->
     <div id="Tab2" class="tabcontent">
+        <p id="BaseConc" style="font-size: 18pt">Your standardized sodium hydroxide concentration is <strong><span>XXX</span> M</strong></p>
       <div id="glassware-container-2" style="margin-top: 40px;">
         <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/Titration%20Setup%20Full-v7.png?raw=true">
         <img id="buret" src="https://github.com/johannalherman/131-AIC/blob/main/Buret.png?raw=true">
@@ -439,7 +440,6 @@
 
     let beakerMass = getRandomAmount(70, 90);
     let acidMass = 0;
-    let totalMass_1 = beakerMass;
     let tareOffset = 0;
     let amount = 0;
 
@@ -685,7 +685,11 @@
 
 
 
-    let NaOH_M = 0.100
+    let NaOH_M = getRandomAmount(0.095, 0.105)
+    updateconc()
+      function updateconc() {
+        document.querySelector("#BaseConc span").textContent = (NaOH_M).toFixed(3)
+      }
     let pH_value = 2;
     let ph_values = [];
     let volume_values = [];
