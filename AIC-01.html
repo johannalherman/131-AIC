@@ -499,27 +499,26 @@
       }
 
       if (size === 'small') {
-        acidMass = getRandomAmount(0.005, 0.020);
+        acidMass += getRandomAmount(0.005, 0.020);
       } else {
-        acidMass = getRandomAmount(0.100, 0.200);
+        acidMass += getRandomAmount(0.100, 0.200);
       }
-      totalMass_1 += acidMass;  
       setTimeout(() => { updateMassDisplay_1()}, 500); 
     }
 
     function updateMassDisplay_1() {
-      document.getElementById("total-mass-1").textContent = `${(totalMass_1 - tareOffset).toFixed(3)} g`;
+      document.getElementById("total-mass-1").textContent = `${(acidMass + beakerMass - tareOffset).toFixed(3)} g`;
     }    
     updateMassDisplay_1()
 
     document.getElementById("tareButton").addEventListener("click", () => {
-      tareOffset = totalMass_1;
+      tareOffset = acidMass + beakerMass;
       updateMassDisplay_1();
     });   
 
     document.getElementById("clearButton").addEventListener("click", () => {
       tareOffset = 0;
-      totalMass_1 = beakerMass;
+      acidMass = 0;
       pileHeight = 0;
       pileWidth = 0;
       updateMassDisplay_1();
