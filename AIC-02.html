@@ -1,503 +1,512 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chem 131 AIC-02 Simulation</title>
-  <style>
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chem 131 AIC-02 Simulation</title>
+
+<style>
 body {
-width: 1000px;
-margin: auto;
-font: 18px Arial, sans-serif;
-padding: 20px;
-text-align: center;
+  width: 1000px;
+  margin: auto;
+  font: 18px Arial, sans-serif;
+  padding: 20px;
+  text-align: center;
 }
 button {        
-font-size: 16px;
+  font-size: 16px;
 }
 .disabled {
-opacity: 0.6;
-cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .tab {
-overflow: hidden;
-text-align: center; 
+  overflow: hidden;
+  text-align: center; 
 }
 /* Style the buttons that are used to open the tab content */
 .tab button { 
-font-size: 22px;
-padding: 10px 20px;
-background-image: linear-gradient(#b4c6ff, #e7edff 50%, #b4c6ff);
-border: 2px solid;
-border-radius: 5px;
-cursor: pointer;
-transition: background-color 0.3s;        
-outline: none;
-transition: 0.3s;
+  font-size: 22px;
+  padding: 10px 20px;
+  background-image: linear-gradient(#b4c6ff, #e7edff 50%, #b4c6ff);
+  border: 2px solid;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;        
+  outline: none;
+  transition: 0.3s;
 }
 /* Change background color of buttons on hover */
 .tab button:hover {
-background-color: #f5f5f5;
-border: 2px solid white;
-border-radius: 5px;
+  background-color: #f5f5f5;
+  border: 2px solid white;
+  border-radius: 5px;
 }
 /* Create an active/current tablink class */
 .tab button.active {
-border: 2px solid;
-border-radius: 5px;
-background-color: white;
+  border: 2px solid;
+  border-radius: 5px;
+  background-color: white;
 }
 /* Style the tab content */
 .tabcontent {
-display: none;
-padding: 10px;
-border: 2px solid #FF2E37;
-border-radius: 5px;
+  display: none;
+  padding: 10px;
+  border: 2px solid #FF2E37;
+  border-radius: 5px;
 }
 
 #dropdown-container {
-margin: 40px auto 20px auto;
-text-align: left;
-width: 900px;
-gap: 10px;
-padding: 10px 30px;
-background-color: #ffd7e1;
-border: 2px solid black;
-border-radius: 8px;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 10px auto 20px auto;
+  text-align: left;
+  width: 900px;
+  gap: 10px;
+  padding: 10px 30px;
+  background-color: #ffd7e1;
+  border: 2px solid black;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 #candySelector, #colorSelector, #indicatorSelector {
-font-size: 20px;
+  font-size: 20px;
 }
 
 .button-container {
-text-align: center;
-z-index: 1000;
+  text-align: center;
+  z-index: 1000;
 }
 .button-container button {
-margin: 20px 0px 0px 0px;
-padding: 10px 20px;
-border: 2px solid;
-border-radius: 5px;
-cursor: pointer;
+  margin: 20px 0px 0px 0px;
+  padding: 10px 20px;
+  border: 2px solid;
+  border-radius: 5px;
+  cursor: pointer;
 }  
 .button-container button:hover {
-border: 2px solid white;
+  border: 2px solid white;
 }
 .button-container button:focus {
-padding: 9px 19px;
-border: 3px solid #FF2E37;
+  padding: 9px 19px;
+  border: 3px solid #FF2E37;
 }
 
 .control-button {
-padding: 10px 20px;
-background-image: linear-gradient(#ff9ab3, #fedee6 50%, #ff9ab3);
-border: 2px solid #FF2E37;
-border-radius: 5px;
-cursor: pointer;
-transition: background-color 0.3s;
+  padding: 10px 20px;
+  background-image: linear-gradient(#ff9ab3, #fedee6 50%, #ff9ab3);
+  border: 2px solid #FF2E37;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 .control-button:hover {
-border: 2px solid white;
+  border: 2px solid white;
 }
 .control-button:focus {
-padding: 9px 19px;
-border: 3px solid #FF2E37;
+  padding: 9px 19px;
+  border: 3px solid #FF2E37;
 }
 
 .row {
-display: flex;
+  display: flex;
 }
 .column {
-flex: 50%;
-padding: 0px 20px;
+  flex: 50%;
+  padding: 0px 20px;
 }
 .column-dropdowns {
-padding: 0px 0px;
-margin: auto;
+  padding: 0px 0px;
+  margin: auto;
 }
 
 
 .candy {
-position: absolute;
-bottom: -50px;
-left: 50%;
-transform: translateX(-50%);
-border-radius: 50%;
-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
-opacity: 1;
-z-index: -100;
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+  opacity: 1;
+  z-index: -100;
 }
 
 #glassware-container-1 { 
-text-align: center; 
-position: relative; 
-height: 320px;
+  text-align: center; 
+  position: relative; 
+  height: 320px;
 }
 #beaker-1 {
-position: absolute;
-bottom: -12px;
-left: 50%;
-transform: translateX(-50%);
-width: 200px;
-z-index: 10;
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  z-index: 10;
 }
 #balance-1 {
-position: absolute;
-bottom: -35.5%;
-left: 50%;
-transform: translateX(-50%);
-width: 400px;
-z-index: 10;
+  position: absolute;
+  bottom: -35.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  z-index: 10;
 }
 #total-mass-1 {
-position: absolute;
-bottom: -108px; 
-left: 50%;
-transform: translateX(-50%);
-border-radius: 5px;
-font-size: 24px;
-font-weight: bold;
-z-index: 10;
+  position: absolute;
+  bottom: -108px; 
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 10;
 }
 
 
 
 #glassware-container-2 { 
-margin: auto; 
-position: relative; 
-width: 400px;
-height: 800px;
+  margin: auto; 
+  position: relative; 
+  width: 400px;
+  height: 800px;
 }
 #titration-setup {
-position: absolute;
-left: 50%;
-transform: translateX(-50%);
-width: 500px;
-z-index: 10;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  z-index: 10;
 }
 #bottle {
-position: absolute;
-left: 245px;
-bottom: 250px;
-width: 200px;
-z-index: 10;
+  position: absolute;
+  left: 245px;
+  bottom: 250px;
+  width: 200px;
+  z-index: 10;
 }
 .button-container-flow {
-text-align: center;
-z-index: 1000;
-position: absolute; 
-left: 285px; 
-bottom: 218px;
-width: 100px;
+  text-align: center;
+  z-index: 1000;
+  position: absolute; 
+  left: 285px; 
+  bottom: 218px;
+  width: 100px;
 }
 .button-container-flow button {
-font-size: 8pt; 
-border: 2px solid;
-border-radius: 5px;
-cursor: pointer;
+  font-size: 8pt; 
+  border: 2px solid;
+  border-radius: 5px;
+  cursor: pointer;
 }
 .button-container-flow button:hover {
-border: 2px solid white;
+  border: 2px solid white;
 }
 
 .dropContainer {
-position: absolute;
-bottom: 39px;
-left: 246px;        
-width: 10px;
-height: 215px;
-z-index: 10;
-overflow: hidden;
+  position: absolute;
+  bottom: 39px;
+  left: 246px;        
+  width: 10px;
+  height: 215px;
+  z-index: 10;
+  overflow: hidden;
 }
 .drop {
-position: absolute;
-width: 6px;
-height: 18px;
-background: #abdcf2;
-opacity: 0.75;
-border-radius: 50%;
-left: 50%; /* Drops come from the same location */
-transform: translateX(-50%);
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  background: #abdcf2;
+  opacity: 0.75;
+  border-radius: 50%;
+  left: 50%; /* Drops come from the same location */
+  transform: translateX(-50%);
 }
 #stirer {
-position: absolute;
-bottom: 20px;
-left: 244px;
-transform: translateX(-50%);
-width: 35px;
-z-index: 10;
+  position: absolute;
+  bottom: 20px;
+  left: 244px;
+  transform: translateX(-50%);
+  width: 35px;
+  z-index: 10;
 }
 
 .water-3 {
-position: absolute;
-bottom: 22px;
-left: 196px;        
-width: 103px;
-height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
-border-radius: 0px 0px 14px 14px;
-background: #abdcf2;
-opacity: 0.25;
-transition: height 0.3s;
-z-index: 50;
+  position: absolute;
+  bottom: 22px;
+  left: 196px;        
+  width: 103px;
+  height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
+  border-radius: 0px 0px 14px 14px;
+  background: #abdcf2;
+  opacity: 0.50;
+  z-index: 50;
 }
 .water-3i {
-position: absolute;
-bottom: 22px;
-left: 196px;        
-width: 103px;
-height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
-border-radius: 0px 0px 14px 14px;
-background: #abdcf2;
-opacity: 0.25;
-transition: height 0.3s;
-z-index: 50;
+  position: absolute;
+  bottom: 22px;
+  left: 196px;        
+  width: 103px;
+  height: 22.5px; /* MAX 120px, set ratio: 1.5px/mL */
+  border-radius: 0px 0px 14px 14px;
+  background: #abdcf2;
+  opacity: 0.50;
+  z-index: 20;
 }
 
 #balance-2 {
-position: absolute;
-bottom: 400px;
-left: -250px;
-width: 320px;
-z-index: 100;
+  position: absolute;
+  bottom: 400px;
+  left: -250px;
+  width: 320px;
+  z-index: 100;
 }
 #total-mass-2 {
-position: absolute;
-bottom: 397px;
-left: -90px;
-transform: translateX(-50%);
-border-radius: 5px;
-font-size: 24px;
-font-weight: bold;
-z-index: 100;
+  position: absolute;
+  bottom: 397px;
+  left: -90px;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 100;
 }
 .button-container-bottle {
-text-align: center;
-z-index: 1000;
-position: absolute; 
-bottom: 360px;
-left: -290px;
-width: 400px;
+  text-align: center;
+  z-index: 1000;
+  position: absolute; 
+  bottom: 360px;
+  left: -290px;
+  width: 400px;
 }
 .button-container-bottle button {
-font-size: 12pt; 
-border: 2px solid;
-border-radius: 5px;
-cursor: pointer;
+  font-size: 12pt; 
+  border: 2px solid;
+  border-radius: 5px;
+  cursor: pointer;
 }
 .button-container-bottle button:hover {
-border: 2px solid white;
+  border: 2px solid white;
 }
 
 #pH_Reading {
-position: relative;
-bottom: -763px;
-left: -189px;
-font-size: 20px;
-font-weight: bold;
-z-index: 100;
+  position: relative;
+  bottom: -763px;
+  left: -189px;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 100;
 }
 
 
 #glassware-container-3 {  
-width: 400px;
-margin: auto; 
-position: relative;
+  width: 400px;
+  margin: auto; 
+  position: relative;
 }
 
 #total-mass-3 {
-position: absolute;
-bottom: 2.5%; /* Adjust as needed */
-left: 50%; /* Adjust as needed */
-transform: translateX(-50%);
-border-radius: 5px;
-font-size: 24px;
-font-weight: bold;
-z-index: 10;
+  position: absolute;
+  bottom: 2.5%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translateX(-50%);
+  border-radius: 5px;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 10;
 }
 
 #cylinder3 {
-display: absolute;
-width: 400px;
-z-index: 0;
+  display: absolute;
+  width: 400px;
+  z-index: 0;
 }
 
 #solution3 {
-position: absolute;
-bottom: 23.9%;
-left: 50%;
-transform: translateX(-50%);
-width: 13%;
-height: 0;
-background: #abdcf2;
-transition: height 0.3s ease-in-out;
-opacity: 0.75;
-z-index: -10;
+  position: absolute;
+  bottom: 23.9%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13%;
+  height: 0;
+  background: #abdcf2;
+  transition: height 0.3s ease-in-out;
+  opacity: 0.75;
+  z-index: -10;
 }
 .solution3::after {
-content: "";
-position: absolute;
-top: 0px;
-right: 50%;
-transform: translateX(50%);
-width: 100%;
-height: 5px;
-background: #def1fa; /* Subtle meniscus highlight */
-border-radius: 0% 0% 50% 50%; /* Round only the bottom corners */
-z-index: 0;
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 50%;
+  transform: translateX(50%);
+  width: 100%;
+  height: 5px;
+  background: #def1fa; /* Subtle meniscus highlight */
+  border-radius: 0% 0% 50% 50%; /* Round only the bottom corners */
+  z-index: 0;
 }
-  </style>
+</style>
+
 </head>
-<body>
-  <div id="dropdown-container">
-    <div class="row">
-      <div class="column-dropdowns" style="flex: 75%;">
-        <p>        
-          <label for="candySelector"><strong>1)</strong> Select Candy Brand:</label>
-          <select id="candySelector">
-            <option value="" selected>Choose from Dropdown</option>
-            <option value="skittle">Skittle</option>
-            <option value="gobstopper">Gobstopper</option>
-            <option value="spree">Spree</option>
-            <option value="smarties">Smarties</option>
-          </select>  
-        </p>
-        <p>        
-          <label for="colorSelector"><strong>2)</strong> Select Candy Color:</label>
-          <select id="colorSelector">
-            <option value="" selected>Choose from Dropdown</option>
-            <option value="red">Red</option>
-            <option value="orange">Orange</option>
-            <option value="yellow">Yellow</option>
-            <option value="green">Green</option>
-            <option value="purple">Purple</option>
-          </select>
-        </p>
-        <p>        
-          <label for="indicatorSelector"><strong>3)</strong> Select Indicator:</label>
-          <select id="indicatorSelector">
-            <option value="" selected>Choose from Dropdown</option>
-            <option value="tymolBlue">Thymol Blue</option>
-            <option value="phenolphthalein">Phenolphthalein</option>
-            <option value="bromothymolBlue">Bromothymol Blue</option>
-          </select>
-        </p>
-      </div>
-      <div class="column-dropdowns" style="flex: 20%;">
-        <button id="resetButton" class="control-button" onclick="resetAll();">Reset All Controls</button>
-      </div>
-    </div>
-  </div>
 
-  <!-- Tab 1 content -->
-  <div id="Tab1" class="tabcontent">
-    <div id="glassware-container-1">
-      <img id="beaker-1" src="https://github.com/johannalherman/131-AIC/blob/main/Beaker-1.png?raw=true">
-      <canvas id="canvas"></canvas>
-      <img id="balance-1" src="https://github.com/johannalherman/131-BBB/blob/main/Balance.png?raw=true">
-      <div id="candy" class="candy"></div>
-      <p id="total-mass-1"><span>0.000</span> g</p>
-    </div>
-    <div class="button-container" style="margin-top: 140px;">
-      <p style="text-align: center; margin-bottom: 0px;"><strong>4)</strong> Weigh candy piece</p>
-      <button id="addCandyBtn">Add Candy Piece</button>
-    </div>
-    <div class="button-container">
-      <button id="tareButton" class="control-button">Tare</button>
-      <button id="clearButton" class="control-button" onclick="clearBalancce();">Clear Balance</button>
-    </div>
-    <div class="tab" style="margin: 80px 10px 40px 10px;">
-      <button id="move2tab2" class="tablinks" onclick="openTabs(event, 'Tab2'); pH_calculate(); findClosestPH(); moveBottleON();">Dissolve candy & begin titration!</button>
-    </div>
-  </div>
+<body><!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chem 131 AIC-02 Simulation</title>
+  </head>
+  <body>
 
-  <!-- Tab 2 content -->
-  <div id="Tab2" class="tabcontent">
-    <p id="BaseConc" style="font-size: 18pt">Your standardized sodium hydroxide concentration is <strong><span>XXX</span> M</strong></p>
-    <div id="glassware-container-2" style="margin-top: 40px;">
-      <img id="bottle" src="https://github.com/johannalherman/131-AIC/blob/main/Bottle_up.png?raw=true">
-      <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/TitrationSetup3_v1.png?raw=true">
-      <div class="water-3" id="water-3"></div>
-      <div class="water-3i" id="water-3i"></div>
-      <div class="dropContainer" id="dropContainer"></div>
-      <div class="button-container-flow">
-        <button id="increase" onclick="changeSpeed(1)">Increase Flow</button>
-        <button id="decrease" onclick="changeSpeed(-1)">Decrease Flow</button>
-      </div>        
-      <img id="stirer" src="https://github.com/johannalherman/131-AIC/blob/main/stir-1.png?raw=true">
-      <p id="pH_Reading">pH: <span>0.00</span></p>
-      <img id="balance-2" src="https://github.com/johannalherman/131-BBB/blob/main/Balance.png?raw=true">
-      <p id="total-mass-2"><span>0.000</span> g</p>
-      <div class="button-container-bottle">
-        <button id="moveON" onclick="moveBottleON()">Bottle ON Balance</button>
-        <button id="moveOFF" onclick="moveBottleOFF()">Bottle OFF Balance</button>
-      </div>        
-    </div>
-    <div class="tab" style="margin: 80px 10px 40px 10px;">
-    <p>      
-      <button class="tablinks" onclick="openTabs(event, 'Tab1'); resetAll();" id="defaultOpen">Complete an additional titration!</button>
-    </p>
-    <p>      
-      <button class="tablinks" onclick="openTabs(event, 'Tab3');">Determine Density of Sodium Hydroxide Solution!</button>
-    </p>
-    </div>
-  </div>
-  
-  
-  <!-- Tab 3 content -->
-  <div id="Tab3" class="tabcontent">    
-      <div class="column">
-      <p style="font-size: 18pt">Weigh out sodium hydroxide solution</p>
-        <!--Balance Area #3 Code-->          
-        <div class="button-container" style="margin-top: -20px;">
-          <button id="dropsButton-3">Add Drops</button>
-          <button id="pourButton-3">Pour In</button>
-        </div>  
-        <div id="glassware-container-3" style="margin-top: 20px">
-          <div id="solution3" class="solution3"></div>
-          <img id="cylinder3" src="https://github.com/johannalherman/Chem131/blob/main/Graduated%20Cylinder%20on%20Balance.png?raw=true" />
-          <p id="total-mass-3"><span>0.000</span> g</p>
+    <!-- Tab 1 content -->
+    <div id="Tab1" class="tabcontent">
+    <div id="dropdown-container">
+      <div class="row">
+        <div class="column-dropdowns" style="flex: 75%;">
+          <p>        
+            <label for="candySelector"><strong>1)</strong> Select Candy Brand:</label>
+            <select id="candySelector">
+              <option value="" selected>Choose from Dropdown</option>
+              <option value="skittle">Skittle</option>
+              <option value="gobstopper">Gobstopper</option>
+              <option value="spree">Spree</option>
+              <option value="smarties">Smarties</option>
+            </select>  
+          </p>
+          <p>        
+            <label for="colorSelector"><strong>2)</strong> Select Candy Color:</label>
+            <select id="colorSelector">
+              <option value="" selected>Choose from Dropdown</option>
+              <option value="red">Red</option>
+              <option value="orange">Orange</option>
+              <option value="yellow">Yellow</option>
+              <option value="green">Green</option>
+              <option value="purple">Purple</option>
+            </select>
+          </p>
+          <p>        
+            <label for="indicatorSelector"><strong>3)</strong> Select Indicator:</label>
+            <select id="indicatorSelector">
+              <option value="" selected>Choose from Dropdown</option>
+              <option value="tymolBlue">Thymol Blue</option>
+              <option value="phenolphthalein">Phenolphthalein</option>
+              <option value="bromothymolBlue">Bromothymol Blue</option>
+            </select>
+          </p>
         </div>
-        <div class="button-container" style="margin-bottom: 40px;">
-          <button id="tareButton-3" class="control-button">Tare Balance</button>
-          <button id="removeSolution-3" class="control-button">Pour Out</button>
+        <div class="column-dropdowns" style="flex: 20%;">
+          <button id="resetButton" class="control-button" onclick="resetAll();">Reset All Controls</button>
         </div>
       </div>
-    <div class="tab" style="margin: 80px 10px 40px 10px;">
-      <button class="tablinks" onclick="openTabs(event, 'Tab1'); resetAll();">Return to Start!</button>
     </div>
-  </div>
+    
+      <div id="glassware-container-1">
+        <img id="beaker-1" src="https://github.com/johannalherman/131-AIC/blob/main/Beaker-1.png?raw=true">
+        <canvas id="canvas"></canvas>
+        <img id="balance-1" src="https://github.com/johannalherman/131-BBB/blob/main/Balance.png?raw=true">
+        <div id="candy" class="candy"></div>
+        <p id="total-mass-1"><span>0.000</span> g</p>
+      </div>
+      <div class="button-container" style="margin-top: 140px;">
+        <p style="text-align: center; margin-bottom: 0px;">Weigh candy piece</p>
+        <button id="addCandyBtn">Add Candy Piece</button>
+      </div>
+      <div class="button-container">
+        <button id="tareButton" class="control-button">Tare</button>
+        <button id="clearButton" class="control-button" onclick="clearBalancce();">Clear Balance</button>
+      </div>
+      <div class="tab" style="margin: 80px 10px 40px 10px;">
+        <button id="move2tab2" class="tablinks" onclick="openTabs(event, 'Tab2'); moveBottleON();">Dissolve candy & begin titration!</button>
+      </div>
+    </div>
 
-  <p style="color: #ff2e37; text-align: left;"><em>This simulation was designed for use on a laptop or desktop computer. Functions may not operate on a mobile device.</em></p>
-  <p style="color: #ff2e37; text-align: left;"><em>Created by Johanna L. Herman, Ph.D. for use in CHEM 131 at the University of Delaware.</em></p>
+    <!-- Tab 2 content -->
+    <div id="Tab2" class="tabcontent">
+      <p id="BaseConc" style="font-size: 18pt">Your standardized sodium hydroxide concentration is <strong><span>XXX</span> M</strong></p>
+      <div id="glassware-container-2" style="margin-top: 40px;">
+        <img id="bottle" src="https://github.com/johannalherman/131-AIC/blob/main/Bottle_up.png?raw=true">
+        <img id="titration-setup" src="https://github.com/johannalherman/131-AIC/blob/main/TitrationSetup3_v1.png?raw=true">
+        <div class="water-3" id="water-3"></div>
+        <div class="water-3i" id="water-3i"></div>
+        <div class="dropContainer" id="dropContainer"></div>
+        <div class="button-container-flow">
+          <button id="increase" onclick="changeSpeed(1)">Increase Flow</button>
+          <button id="decrease" onclick="changeSpeed(-1)">Decrease Flow</button>
+        </div>        
+        <img id="stirer" src="https://github.com/johannalherman/131-AIC/blob/main/stir-1.png?raw=true">
+        <p id="pH_Reading">pH: <span>0.00</span></p>
+        <img id="balance-2" src="https://github.com/johannalherman/131-BBB/blob/main/Balance.png?raw=true">
+        <p id="total-mass-2"><span>0.000</span> g</p>
+        <div class="button-container-bottle">
+          <button id="moveON" onclick="moveBottleON()">Bottle ON Balance</button>
+          <button id="moveOFF" onclick="moveBottleOFF()">Bottle OFF Balance</button>
+        </div>        
+      </div>
+      <div class="tab" style="margin: 80px 10px 40px 10px;">
+      <p>      
+        <button class="tablinks" onclick="openTabs(event, 'Tab1'); resetAll();" id="defaultOpen">Complete an additional titration!</button>
+      </p>
+      <p>      
+        <button class="tablinks" onclick="openTabs(event, 'Tab3');">Determine Density of Sodium Hydroxide Solution!</button>
+      </p>
+      </div>
+    </div>
+    
+    
+    <!-- Tab 3 content -->
+    <div id="Tab3" class="tabcontent">    
+        <div class="column">
+        <p style="font-size: 18pt">Use the balance and graduated cylinder to weigh out a sodium hydroxide solution.</p>
+          <!--Balance Area #3 Code-->          
+          <div class="button-container" style="margin-top: -20px;">
+            <button id="dropsButton-3">Add Drops</button>
+            <button id="pourButton-3">Pour In</button>
+          </div>  
+          <div id="glassware-container-3" style="margin-top: 20px">
+            <div id="solution3" class="solution3"></div>
+            <img id="cylinder3" src="https://github.com/johannalherman/Chem131/blob/main/Graduated%20Cylinder%20on%20Balance.png?raw=true" />
+            <p id="total-mass-3"><span>0.000</span> g</p>
+          </div>
+          <div class="button-container" style="margin-bottom: 40px;">
+            <button id="tareButton-3" class="control-button">Tare Balance</button>
+            <button id="removeSolution-3" class="control-button">Pour Out</button>
+          </div>
+        </div>
+      <div class="tab" style="margin: 80px 10px 40px 10px;">
+        <button class="tablinks" onclick="openTabs(event, 'Tab1'); resetAll();">Return to Start!</button>
+      </div>
+    </div>
+
+    <p style="color: #ff2e37; text-align: left;"><em>This simulation was designed for use on a laptop or desktop computer. Functions may not operate on a mobile device.</em></p>
+    <p style="color: #ff2e37; text-align: left;"><em>Created by Johanna L. Herman, Ph.D. for use in CHEM 131 at the University of Delaware.</em></p>
+  </body>
+</html>
 </body>
 
 <script>
-  
 function getRandomAmount(min, max) {
-return Math.random() * (max - min) + min;
+  return Math.random() * (max - min) + min;
 }
 
 const AcidData = {
-Citric: { MW: 192.124, rxnRatio: 3, pKa1: 3.12, pKa2: 4.76, pKa3: 6.39},
-Malic: { MW: 134.0874, rxnRatio: 2, pKa1: 3.40, pKa2: 5.11, pKa3: 10},
-Malonic: { MW: 104.0615, rxnRatio: 2, pKa1: 2.83, pKa2: 5.69, pKa3: 10},
-Tartaric: { MW: 150.087, rxnRatio: 2, pKa1: 2.98, pKa2: 4.34, pKa3: 10}
+  Citric: { MW: 192.124, rxnRatio: 3, pKa1: 3.12, pKa2: 4.76, pKa3: 6.39},
+  Malic: { MW: 134.0874, rxnRatio: 2, pKa1: 3.40, pKa2: 5.11, pKa3: 10},
+  Malonic: { MW: 104.0615, rxnRatio: 2, pKa1: 2.83, pKa2: 5.69, pKa3: 10},
+  Tartaric: { MW: 150.087, rxnRatio: 2, pKa1: 2.98, pKa2: 4.34, pKa3: 10}
 };
 const CandyData = {
-skittle: { acid: "Citric", mass: 1.10, percentAcid: 1.30, width: 40, height: 24, radius: 50, opacity: 1},
-gobstopper: { acid: "Malic", mass: 1.65, percentAcid: 1.05, width: 40, height: 40, radius: 50, opacity: 1},
-spree: { acid: "Malic", mass: 1.05, percentAcid: 2.60, width: 40, height: 18, radius: 30, opacity: 1},
-smarties: { acid: "Citric", mass: 0.75, percentAcid: 2.00, width: 40, height: 16, radius: 30, opacity: 0.3}
+  skittle: { acid: "Citric", mass: 1.10, percentAcid: 1.30, width: 40, height: 24, radius: 50, opacity: 1},
+  gobstopper: { acid: "Malic", mass: 1.65, percentAcid: 1.05, width: 40, height: 40, radius: 50, opacity: 1},
+  spree: { acid: "Malic", mass: 1.05, percentAcid: 2.60, width: 40, height: 18, radius: 30, opacity: 1},
+  smarties: { acid: "Citric", mass: 0.75, percentAcid: 2.00, width: 40, height: 16, radius: 30, opacity: 0.3}
 };
 const Dyes = {
-red: { color: "#E02910" },
-orange: { color: "#ee6c21" },
-purple: { color: "#5D2B7D" },
-green: { color: "#8FC33E" },
-yellow: { color: "#ffe24e" }
+  red: { color: "#E02910" },
+  orange: { color: "#ee6c21" },
+  purple: { color: "#5D2B7D" },
+  green: { color: "#8FC33E" },
+  yellow: { color: "#ffe24e" }
 };
 
 let currentCandy = ""
@@ -507,52 +516,52 @@ let currentIndicator = ""
 const candyPiece = document.getElementById("candy");
 
 document.getElementById("candySelector").addEventListener("change", function(event) {    
-currentCandy = event.target.value
-currentAcid = CandyData[currentCandy].acid
+  currentCandy = event.target.value
+  currentAcid = CandyData[currentCandy].acid
 
-candyPiece.style.width = CandyData[currentCandy].width + 'px';
-candyPiece.style.height = CandyData[currentCandy].height + 'px';
-candyPiece.style.borderRadius = CandyData[currentCandy].radius + '%';
-candyPiece.style.opacity = CandyData[currentCandy].opacity;
+  candyPiece.style.width = CandyData[currentCandy].width + 'px';
+  candyPiece.style.height = CandyData[currentCandy].height + 'px';
+  candyPiece.style.borderRadius = CandyData[currentCandy].radius + '%';
+  candyPiece.style.opacity = CandyData[currentCandy].opacity;
 
-if (currentColor == "") { } else { addCandyBtn.disabled = false; }
+  if (currentColor == "") { } else { addCandyBtn.disabled = false; }
 });
 document.getElementById("colorSelector").addEventListener("change", function(event) {    
-currentColor = event.target.value
+  currentColor = event.target.value
 
-candyPiece.style.background = Dyes[currentColor].color;
-const beakerSoln = document.getElementById("water-3");
-beakerSoln.style.background = Dyes[currentColor].color;
+  candyPiece.style.background = Dyes[currentColor].color;
+  const beakerSoln = document.getElementById("water-3");
+  beakerSoln.style.background = Dyes[currentColor].color;
 
-if (currentAcid == "") { } else { addCandyBtn.disabled = false; }
+  if (currentAcid == "") { } else { addCandyBtn.disabled = false; }
 });
 document.getElementById("indicatorSelector").addEventListener("change", function(event) {    
-currentIndicator = event.target.value
+  currentIndicator = event.target.value
 });
 
 
 function resetAll() {
 
-// panel 1
-clearBalancce()
-addCandyBtn.disabled = true;
-currentAcid = ""
-currentCandy = ""
-currentColor = ""
-currentIndicator = ""
+  // panel 1
+  clearBalancce()
+  addCandyBtn.disabled = true;
+  currentAcid = ""
+  currentCandy = ""
+  currentColor = ""
+  currentIndicator = ""
 
-// panel 2
-resetTitration()
+  // panel 2
+  resetTitration()
 
-openTabs(event, 'Tab1')
+  openTabs(event, 'Tab1')
 
-// Reset dropdown
-const candySelector = document.getElementById("candySelector");
-candySelector.value = "";
-const colorSelector = document.getElementById("colorSelector");
-colorSelector.value = "";
-const indicatorSelector = document.getElementById("indicatorSelector");
-indicatorSelector.value = "";
+  // Reset dropdown
+  const candySelector = document.getElementById("candySelector");
+  candySelector.value = "";
+  const colorSelector = document.getElementById("colorSelector");
+  colorSelector.value = "";
+  const indicatorSelector = document.getElementById("indicatorSelector");
+  indicatorSelector.value = "";
 }
 
 
@@ -566,32 +575,35 @@ addCandyBtn.addEventListener("click", () => addCandy());
 
 
 function addCandy() {
-candyMass = CandyData[currentCandy].mass * candyError;
-acidMass = candyMass * (CandyData[currentCandy].percentAcid/100);
-candyPiece.style.bottom = -8 + "px";
+  candyMass = CandyData[currentCandy].mass * candyError;
+  acidMass = candyMass * (CandyData[currentCandy].percentAcid/100);
+  candyPiece.style.bottom = -8 + "px";
 
-addCandyBtn.disabled = true;
-move2tab2.disabled = false;
-updateMassDisplay_1();
+  addCandyBtn.disabled = true;
+  move2tab2.disabled = false;
+  updateMassDisplay_1();
+  
+  pH_calculate(); 
+  findClosestPH(); 
 }
 
 function updateMassDisplay_1() {
-document.getElementById("total-mass-1").textContent = `${(candyMass + beakerMass - tareOffset).toFixed(3)} g`;
+  document.getElementById("total-mass-1").textContent = `${(candyMass + beakerMass - tareOffset).toFixed(3)} g`;
 }
 updateMassDisplay_1()
 
 document.getElementById("tareButton").addEventListener("click", () => {
-tareOffset = candyMass + beakerMass;
-updateMassDisplay_1();
+  tareOffset = candyMass + beakerMass;
+  updateMassDisplay_1();
 });
 
 function clearBalancce() {
-tareOffset = 0;
-candyMass = 0;
-updateMassDisplay_1();
-candyPiece.style.bottom = -50 + "px";
-addCandyBtn.disabled = false;
-move2tab2.disabled = true;
+  tareOffset = 0;
+  candyMass = 0;
+  updateMassDisplay_1();
+  candyPiece.style.bottom = -50 + "px";
+  addCandyBtn.disabled = false;
+  move2tab2.disabled = true;
 }
 
 
@@ -613,83 +625,83 @@ let interval = null;
 let current_flow = 0
 
 function moveBottleON() {
-const image = document.getElementById('bottle');
-image.style.transform = 'scale(0.80) translate(-555px, -255px) rotate(142deg)';  
-increase.disabled = true;  
-decrease.disabled = true;
-totalMass_2 = NaOH_Mass;
-updateMassDisplay_2()
+  const image = document.getElementById('bottle');
+  image.style.transform = 'scale(0.80) translate(-555px, -255px) rotate(142deg)';  
+  increase.disabled = true;  
+  decrease.disabled = true;
+  totalMass_2 = NaOH_Mass;
+  updateMassDisplay_2()
 }
 function moveBottleOFF() {
-const image = document.getElementById('bottle');
-image.style.transform = 'none'; 
-increase.disabled = false;  
-decrease.disabled = false;
-totalMass_2 = 0;
-updateMassDisplay_2()
+  const image = document.getElementById('bottle');
+  image.style.transform = 'none'; 
+  increase.disabled = false;  
+  decrease.disabled = false;
+  totalMass_2 = 0;
+  updateMassDisplay_2()
 }
 
 function updateMassDisplay_2() {
-document.getElementById("total-mass-2").textContent = `${(totalMass_2).toFixed(3)} g`;
+  document.getElementById("total-mass-2").textContent = `${(totalMass_2).toFixed(3)} g`;
 }
 
 function updateVolumes(change) {
-vol_beaker += change;
-vol_bottle_trans += change;
-changeLiquidLevel3()
+  vol_beaker += change;
+  vol_bottle_trans += change;
+  changeLiquidLevel3()
 
-NaOHbottle_vol -= change;
-NaOH_Mass = NaOHbottle_vol * D_NaOH;
+  NaOHbottle_vol -= change;
+  NaOH_Mass = NaOHbottle_vol * D_NaOH;
 }
 function changeLiquidLevel3() {
-document.getElementById("water-3").style.height = vol_beaker * 1.5 + "px"
-document.getElementById("water-3i").style.height = vol_beaker * 1.5 + "px"
+  document.getElementById("water-3").style.height = vol_beaker * 1.5 + "px"
+  document.getElementById("water-3i").style.height = vol_beaker * 1.5 + "px"
 }
 
 function createDrop() {
-if (vol_bottle_trans >= 30) {
-  clearInterval(interval);
-  return;
-}
-let drop = document.createElement("div");
-drop.classList.add("drop");
-document.getElementById("dropContainer").appendChild(drop);
-let fallDistance = document.getElementById("dropContainer").clientHeight;
+  if (vol_bottle_trans >= 30) {
+    clearInterval(interval);
+    return;
+  }
+  let drop = document.createElement("div");
+  drop.classList.add("drop");
+  document.getElementById("dropContainer").appendChild(drop);
+  let fallDistance = document.getElementById("dropContainer").clientHeight;
 
-let animation = drop.animate([
-  { transform: "translateY(0px)" },
-  { transform: "translateY(" + fallDistance + "px)" }
-], {
-  duration: 250,
-  easing: "linear"
-});
+  let animation = drop.animate([
+    { transform: "translateY(0px)" },
+    { transform: "translateY(" + fallDistance + "px)" }
+  ], {
+    duration: 250,
+    easing: "linear"
+  });
 
-animation.onfinish = () => {
-  drop.remove();
-  updateVolumes(volumePerDrop);
-  findClosestPH();
-};
+  animation.onfinish = () => {
+    drop.remove();
+    updateVolumes(volumePerDrop);
+    findClosestPH();
+  };
 }
 function changeSpeed(change) {
-if (vol_bottle_trans >= 30) return;
-currentSpeedIndex = Math.max(0, Math.min(4, currentSpeedIndex + change));
-if (interval) {
-  clearInterval(interval);      
-  moveON.disabled = false;  
-  moveOFF.disabled = false;
-}
-if (speedLevels[currentSpeedIndex] > 0) {
-  interval = setInterval(createDrop, speedLevels[currentSpeedIndex]);     
-  moveON.disabled = true;  
-  moveOFF.disabled = true;
-}
+  if (vol_bottle_trans >= 30) return;
+  currentSpeedIndex = Math.max(0, Math.min(4, currentSpeedIndex + change));
+  if (interval) {
+    clearInterval(interval);      
+    moveON.disabled = false;  
+    moveOFF.disabled = false;
+  }
+  if (speedLevels[currentSpeedIndex] > 0) {
+    interval = setInterval(createDrop, speedLevels[currentSpeedIndex]);     
+    moveON.disabled = true;  
+    moveOFF.disabled = true;
+  }
 }
 
 let current_stir = 1;
 const baseURL = "https://raw.githubusercontent.com/johannalherman/131-AIC/main/stir-";
 function changeStir() {
-current_stir = (current_stir % 8) + 1;
-document.getElementById("stirer").src = `${baseURL}${current_stir}.png`;
+  current_stir = (current_stir % 8) + 1;
+  document.getElementById("stirer").src = `${baseURL}${current_stir}.png`;
 }
 setInterval(changeStir, 120);
 
@@ -699,7 +711,7 @@ setInterval(changeStir, 120);
 let NaOH_M = getRandomAmount(0.0900, 0.0999)
 updateconc()
 function updateconc() {
-document.querySelector("#BaseConc span").textContent = (NaOH_M).toFixed(4)
+  document.querySelector("#BaseConc span").textContent = (NaOH_M).toFixed(4)
 }
 
 let ph_values = [];
@@ -718,128 +730,128 @@ let Kw = Math.pow(10, -14)
 let acid_Volume = 0.015; 
 
 function pH_calculate() {
-let acid_M = (acidMass/AcidData[currentAcid].MW) / acid_Volume;
-let ka1 = Math.pow(10, -AcidData[currentAcid].pKa1);
-let ka2 = Math.pow(10, -AcidData[currentAcid].pKa2);
-let ka3 = Math.pow(10, -AcidData[currentAcid].pKa3);
+  let acid_M = (acidMass/AcidData[currentAcid].MW) / acid_Volume;
+  let ka1 = Math.pow(10, -AcidData[currentAcid].pKa1);
+  let ka2 = Math.pow(10, -AcidData[currentAcid].pKa2);
+  let ka3 = Math.pow(10, -AcidData[currentAcid].pKa3);
 
 
-for (let ph = 1; ph <= 14; ph += 0.01) {
-  let h = Math.pow(10, -ph);
-  let oh = Kw / h;
-  let delta = h - oh;
+  for (let ph = 1; ph <= 14; ph += 0.01) {
+    let h = Math.pow(10, -ph);
+    let oh = Kw / h;
+    let delta = h - oh;
 
-  if (currentAcid === 'Citric') {
-    let denominator = (ka1 * ka2 * ka3) + (ka1 * ka2 * h) + (ka1 * Math.pow(h, 2)) + Math.pow(h, 3);
-    let alpha1 = (ka1 * Math.pow(h, 2)) / denominator;
-    let alpha2 = (ka1 * ka2 * h) / denominator;
-    let alpha3 = (ka1 * ka2 * ka3) / denominator;
-    let numerator = (acid_M * alpha1) + (2 * acid_M * alpha2) + (3 * acid_M * alpha3) - delta;
-    let volume = acid_Volume * numerator / (NaOH_M + delta);
-    ph_values.push(ph);
-    volume_values.push(volume);
-  } else {
-    let denominator = (ka1 * ka2) + (ka1 * h) + (h * h);
-    let alpha1 = (ka1 * h) / denominator;
-    let alpha2 = (ka1 * ka2) / denominator;
-    let numerator = (acid_M * alpha1) + (2 * acid_M * alpha2) - delta;
-    let volume = acid_Volume * numerator / (NaOH_M + delta);
-    ph_values.push(ph);
-    volume_values.push(volume);
+    if (currentAcid === 'Citric') {
+      let denominator = (ka1 * ka2 * ka3) + (ka1 * ka2 * h) + (ka1 * Math.pow(h, 2)) + Math.pow(h, 3);
+      let alpha1 = (ka1 * Math.pow(h, 2)) / denominator;
+      let alpha2 = (ka1 * ka2 * h) / denominator;
+      let alpha3 = (ka1 * ka2 * ka3) / denominator;
+      let numerator = (acid_M * alpha1) + (2 * acid_M * alpha2) + (3 * acid_M * alpha3) - delta;
+      let volume = acid_Volume * numerator / (NaOH_M + delta);
+      ph_values.push(ph);
+      volume_values.push(volume);
+    } else {
+      let denominator = (ka1 * ka2) + (ka1 * h) + (h * h);
+      let alpha1 = (ka1 * h) / denominator;
+      let alpha2 = (ka1 * ka2) / denominator;
+      let numerator = (acid_M * alpha1) + (2 * acid_M * alpha2) - delta;
+      let volume = acid_Volume * numerator / (NaOH_M + delta);
+      ph_values.push(ph);
+      volume_values.push(volume);
+    }
+
   }
-
-}
-return { ph_values, volume_values };
+  return { ph_values, volume_values };
 }
 
 
 function findClosestPH() {   
-let closestIndex = 0;
-let minDiff = Math.abs(volume_values[0] - (vol_bottle_trans/1000));
+  let closestIndex = 0;
+  let minDiff = Math.abs(volume_values[0] - (vol_bottle_trans/1000));
 
-for (let i = 1; i < volume_values.length; i++) {
-  const diff = Math.abs(volume_values[i] - (vol_bottle_trans/1000));
-  if (diff < minDiff) {
-    minDiff = diff;
-    closestIndex = i;
+  for (let i = 1; i < volume_values.length; i++) {
+    const diff = Math.abs(volume_values[i] - (vol_bottle_trans/1000));
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestIndex = i;
+    }
   }
-}
-pH_value = ph_values[closestIndex];
-setTimeout(() => {
-  update_pHDisplay()
-}, 750);
+  pH_value = ph_values[closestIndex];
+  setTimeout(() => {
+    update_pHDisplay()
+  }, 750);
 
 }
 
 function update_pHDisplay() {
-document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
-pH_color()
+  document.querySelector('#pH_Reading span').textContent =  (pH_value).toFixed(2);
+  pH_color()
 }
-let pH_value = 2;
+let pH_value = 2.8;
 update_pHDisplay()
 
 // pH_color
 function pH_color() {
-let pHcolor;
+  let pHcolor;
 
-if(currentIndicator === 'tymolBlue') {
-  // thymol blue
-  if (pH_value < 2.8) { 
-    pHcolor = "#f56478"; // Red/Orange
-  } else if (pH_value >= 2.8 && pH_value < 3.1) {
-    pHcolor = "#f59c6e"; // Orange/Yellow
-  } else if (pH_value >= 3.1 && pH_value < 7.8) {
-    pHcolor = "#fbf278"; // Yellow
-  } else if (pH_value >= 7.8 && pH_value < 8.1) {
-    pHcolor = "#c2db86"; // Yellow/Green
-  } else if (pH_value >= 8.1 && pH_value < 8.8) {
-    pHcolor = "#c2db86"; // Green
-  } else if (pH_value >= 8.8) {
-    pHcolor = "#0189b7"; // Green/Blue
-  } else {
-    pHcolor = "#abdcf2"; // Default color
-  }
-} else if (currentIndicator === 'phenolphthalein') {
-  // phenolphthalein
-  if (pH_value < 8.6) { 
-    pHcolor = "#abdcf2"; // NA
-  } else if (pH_value >= 8.6) {
-    pHcolor = "#fcd1e9"; // Pink
-  } else {
-    pHcolor = "#abdcf2"; // Default color
-  }
-} else if (currentIndicator === 'bromothymolBlue') {
-  // bromothymol blue
-  if (pH_value < 6.2) { 
-    pHcolor = "#f0ee7b"; // Yellow
-  } else if (pH_value >= 6.2 && pH_value < 7.2) {
-    pHcolor = "#8fcf8d"; // green
-  } else if (pH_value >= 7.2) {
-    pHcolor = "#3ea7cd"; // blue
-  } else {
-    pHcolor = "#abdcf2"; // Default color
-  }
-} else { pHcolor = "#abdcf2"; }
+  if(currentIndicator === 'tymolBlue') {
+    // thymol blue
+    if (pH_value < 2.8) { 
+      pHcolor = "#f56478"; // Red/Orange
+    } else if (pH_value >= 2.8 && pH_value < 3.1) {
+      pHcolor = "#f59c6e"; // Orange/Yellow
+    } else if (pH_value >= 3.1 && pH_value < 7.8) {
+      pHcolor = "#fbf278"; // Yellow
+    } else if (pH_value >= 7.8 && pH_value < 8.1) {
+      pHcolor = "#c2db86"; // Yellow/Green
+    } else if (pH_value >= 8.1 && pH_value < 8.8) {
+      pHcolor = "#c2db86"; // Green
+    } else if (pH_value >= 8.8) {
+      pHcolor = "#0189b7"; // Green/Blue
+    } else {
+      pHcolor = "#abdcf2"; // Default color
+    }
+  } else if (currentIndicator === 'phenolphthalein') {
+    // phenolphthalein
+    if (pH_value < 8.6) { 
+      pHcolor = "#abdcf2"; // NA
+    } else if (pH_value >= 8.6) {
+      pHcolor = "#fcd1e9"; // Pink
+    } else {
+      pHcolor = "#abdcf2"; // Default color
+    }
+  } else if (currentIndicator === 'bromothymolBlue') {
+    // bromothymol blue
+    if (pH_value < 6.2) { 
+      pHcolor = "#f0ee7b"; // Yellow
+    } else if (pH_value >= 6.2 && pH_value < 7.2) {
+      pHcolor = "#8fcf8d"; // green
+    } else if (pH_value >= 7.2) {
+      pHcolor = "#3ea7cd"; // blue
+    } else {
+      pHcolor = "#abdcf2"; // Default color
+    }
+  } else { pHcolor = "#abdcf2"; }
 
-const beakerSolni = document.getElementById("water-3i");
-if (beakerSolni) {
-  beakerSolni.style.background = pHcolor;
-}
+  const beakerSolni = document.getElementById("water-3i");
+  if (beakerSolni) {
+    beakerSolni.style.background = pHcolor;
+  }
 }
 
 function resetTitration() { 
-vol_bottle_trans = 0
-vol_beaker = 15
-changeSpeed(-10)
-updateVolumes(0)
-pH_value = 2;
-update_pHDisplay()
-ph_values = [];
-volume_values = [];  
+  vol_bottle_trans = 0
+  vol_beaker = 15
+  changeSpeed(-10)
+  updateVolumes(0)
+  pH_value = 2;
+  update_pHDisplay()
+  ph_values = [];
+  volume_values = [];  
 
-NaOHbottle_vol = 50;
-NaOH_Mass = NaOHbottle_vol * D_NaOH; // starts w/ 50mL in bottle
-moveBottleOFF()
+  NaOHbottle_vol = 50;
+  NaOH_Mass = NaOHbottle_vol * D_NaOH; // starts w/ 50mL in bottle
+  moveBottleOFF()
 }
 
 
@@ -854,78 +866,78 @@ let px_scalor_3 = 36.35 // number of px in mL in cylinder image
 let increment = 0 // Adjust this value for how much water should be added to cylinder per click
 
 document.getElementById("dropsButton-3").addEventListener("click", () => {
-addSolution("drops");
+  addSolution("drops");
 }); 
 document.getElementById("pourButton-3").addEventListener("click", () => {
-addSolution("pour");
+  addSolution("pour");
 });  
 document.getElementById("removeSolution-3").addEventListener("click", () => {
-removeSolution();
+  removeSolution();
 }); 
 document.getElementById("tareButton-3").addEventListener("click", () => {
-tareOffset3 = totalMass3
-updateMassDisplay3()
+  tareOffset3 = totalMass3
+  updateMassDisplay3()
 });        
 
 function addSolution(size) {
-if (size === 'drops') {
-  amount = 0.1
-} else {
-  amount = getRandomAmount(3, 4.5)
-}
-solVolume3 = Math.min(cylinderVolume / px_scalor_3, solVolume3 + amount)
-massNaOH = (solVolume3 * D_NaOH)
-totalMass3 = massNaOH + cylinderMass
-updateMassDisplay3()
-increaseLiquidLevel3()
+  if (size === 'drops') {
+    amount = 0.1
+  } else {
+    amount = getRandomAmount(3, 4.5)
+  }
+  solVolume3 = Math.min(cylinderVolume / px_scalor_3, solVolume3 + amount)
+  massNaOH = (solVolume3 * D_NaOH)
+  totalMass3 = massNaOH + cylinderMass
+  updateMassDisplay3()
+  increaseLiquidLevel3()
 }
 
 function removeSolution() {
-amount = 2
-if (amount >= solVolume3) {
-  amount = solVolume3
-}
-solVolume3 = Math.max(0, solVolume3 - amount)
-massNaOH = (solVolume3 * D_NaOH)
-totalMass3 = massNaOH + cylinderMass
-updateMassDisplay3()
-increaseLiquidLevel3()
+  amount = 2
+  if (amount >= solVolume3) {
+    amount = solVolume3
+  }
+  solVolume3 = Math.max(0, solVolume3 - amount)
+  massNaOH = (solVolume3 * D_NaOH)
+  totalMass3 = massNaOH + cylinderMass
+  updateMassDisplay3()
+  increaseLiquidLevel3()
 }
 
 function increaseLiquidLevel3() {
-if (solVolume3 > 0) {
-  document.getElementById("solution3").style.height = solVolume3 * px_scalor_3 + 4 + "px";
-} else {
-  document.getElementById("solution3").style.height = solVolume3 * px_scalor_3 + "px";
-}
+  if (solVolume3 > 0) {
+    document.getElementById("solution3").style.height = solVolume3 * px_scalor_3 + 4 + "px";
+  } else {
+    document.getElementById("solution3").style.height = solVolume3 * px_scalor_3 + "px";
+  }
 }
 function updateMassDisplay3() {
-document.querySelector("#total-mass-3 span").textContent =
-  (totalMass3 - tareOffset3).toFixed(3)
+  document.querySelector("#total-mass-3 span").textContent =
+    (totalMass3 - tareOffset3).toFixed(3)
 }
 updateMassDisplay3()
 
 
 
 function openTabs(evt, Sim_part) {
-// Declare all variables
-var i, tabcontent, tablinks;
+  // Declare all variables
+  var i, tabcontent, tablinks;
 
-// Get all elements with class="tabcontent" and hide them
-tabcontent = document.getElementsByClassName("tabcontent");
-for (i = 0; i < tabcontent.length; i++) {
-  tabcontent[i].style.display = "none";
-}
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
 
-// Get all elements with class="tablinks" and remove the class "active"
-tablinks = document.getElementsByClassName("tablinks");
-for (i = 0; i < tablinks.length; i++) {
-  tablinks[i].className = tablinks[i].className.replace(" active", "");
-}
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
 
-// Show the current tab, and add an "active" class to the button that opened the tab
-document.getElementById(Sim_part).style.display = "block";
-evt.currentTarget.className += " active";
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(Sim_part).style.display = "block";
+  evt.currentTarget.className += " active";
 }
 
 // Get the element with id="defaultOpen" and click on it
